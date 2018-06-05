@@ -47,6 +47,8 @@
             $this->setAberto($aberto);
         }
 
+        
+
         /*Função de inserção de funcionário, chamada por um objeto Funcionário.*/
         public function insertCondomino($id){
             $data = $this->getData();
@@ -84,15 +86,15 @@
         e seu conteúdo. Caso seja procura por Nome, divide o conteúdo entre Nome e Sobrenome,
         e busca utilizando AND e LIKE.*/
 
-        public static function search($conteudo, $tipo){
+        public static function search($tipo){
             $conn = new mysqli("localhost", "root", "", "ckeep");     
-                $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE $tipo=?");
-                $stmt->bind_param('s', $conteudo);
+                $stmt = $conn->prepare("SELECT * FROM gastos WHERE tipo = ?");
+                $stmt->bind_param('s', $tipo);
                     if ($stmt->execute()){ 
                             $result = $stmt->get_result();
                             return $result;
                         }
-        }        
+        }
 
         /*Função de exclusão, que não permite a exclusão de usuário
         caso o mesmo seja responsável financeiro por algum apartamento.*/

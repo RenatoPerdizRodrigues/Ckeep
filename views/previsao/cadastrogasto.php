@@ -31,9 +31,9 @@
             <input required type="number" name="valor"><br>
             <label>Tipo*</label>
             <select name="tipo">
-                <option value="fixo">Fixo</option>
-                <option value="extraordinario">Extraordinário</option>
-                <option value="atividade">Atividade</option>
+                <option value="1">Fixo</option>
+                <option value="2">Extraordinário</option>
+                <option value="3">Atividade</option>
             </select>
             <label>Descrição*</label>
             <input required type="textarea" name="descricao"><br>

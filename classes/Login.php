@@ -31,9 +31,10 @@
         public static function checkFuncLogin($user, $senha){
             $conn = new mysqli("localhost", "root", "", "ckeep");
 
+            $permissao = 0;
             //Primeira query volta os resultados da busca com o usuário para podermos comparar a senha em seguida
-            $stmt = $conn->prepare("SELECT * FROM funcionario WHERE usuario = ? ");
-            $stmt->bind_param('s', $user);
+            $stmt = $conn->prepare("SELECT * FROM funcionario WHERE usuario = ? AND permissao = ? ");
+            $stmt->bind_param('si', $user, $permissao);
 
             if ($stmt->execute()){
                 //Checa se ao menos um resultado foi encontrado
@@ -69,9 +70,8 @@
                     $checasenha = password_verify($senha, $usuario[0]['senha']);
                     if ($checasenha == true){
                         //Login e Senha corretos, cria sessão
-                        echo "estou aqui";
                         $_SESSION['ID'] = $usuario[0]['ID'];
-                        return $_SESSION['ID'];
+                        header("Location: " . ROOT . "index.php");
                     } else {header("Location: login.php");}
 
                 } //else {header("Location: login.php");}
