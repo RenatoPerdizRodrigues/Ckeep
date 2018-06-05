@@ -40,7 +40,7 @@
         switch($tipo){
 
         case 'condomino':
-            var_dump(Login::checkUserLogin($usuario, $senha));
+            Login::checkUserLogin($usuario, $senha)
             exit();
             break;
 
