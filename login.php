@@ -13,22 +13,22 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form class="wrapper" method="POST" action="index.php">
-    <fieldset>
-    <legend>Login</legend>
-    <label>Tipo de Usuário</label>
-    <select name="tipo">
-        <option value="condomino">Condômino</option>
-        <option value="funcionario">Funcionário</option>
-        <option value="administrador">Administrador</option>
-    </select>
-    <label>Usuário</label>
-    <input type="text" name="usuario">
-    <label>Senha</label>
-    <input type="password" name="senha"><br>
-    <input type="submit">
-    </fieldset>
-    </form>    
+    <form class="wrapper" method="POST" action="login.php">
+        <fieldset>
+            <legend>Login</legend>
+            <label>Tipo de Usuário</label>
+            <select name="tipo">
+                <option value="condomino">Condômino</option>
+                <option value="funcionario">Funcionário</option>
+                <option value="administrador">Administrador</option>
+            </select>
+            <label>Usuário</label>
+            <input type="text" name="usuario">
+            <label>Senha</label>
+            <input type="password" name="senha"><br>
+            <input type="submit">
+        </fieldset>
+    </form>
 </body>
 </html>
 <?php
@@ -38,24 +38,21 @@
 
     if ($usuario && $senha && $tipo){
         switch($tipo){
-        
+
         case 'condomino':
-            Login::checkUserLogin($usuario, $senha);
-            header("Location: ".ROOT."usuario/index.php");
+            var_dump(Login::checkUserLogin($usuario, $senha));
             exit();
             break;
 
         case 'funcionario':
             Login::checkFuncLogin($usuario, $senha);
-            header("Location: ".ROOT."funcionario/index.php");
             exit();
             break;
 
         case 'administrador':
             Login::checkAdmLogin($usuario, $senha);
-            header("Location: ".ROOT."admin/index.php");
             exit();
-            break;    
+            break;
         }
     }
 ?>

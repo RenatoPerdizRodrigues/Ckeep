@@ -1,5 +1,6 @@
 <?php
     if (!defined('ROOT')) define('ROOT', 'http://localhost/ckeep/');
+
     class Login{
         public static function checkUserLogin($user, $senha){
             $conn = new mysqli("localhost", "root", "", "ckeep");
@@ -12,14 +13,15 @@
                 //Checa se ao menos um resultado foi encontrado
                 $result = $stmt->get_result();
                 $usuario = $result->fetch_all(MYSQLI_ASSOC);
+
                 if ($usuario){
-                    //Pega as informações do resultado. Agora devemos comparar a senha;                    
+                    //Pega as informações do resultado. Agora devemos comparar a senha;
                     $checasenha = password_verify($senha, $usuario[0]['senha']);
                     if ($checasenha == true){
                         //Login e Senha corretos, cria sessão
-                        echo "estou aqui";
                         $_SESSION['ID'] = $usuario[0]['ID'];
-                        return $_SESSION['ID'];
+                        header("Location: " . ROOT . "index.php");
+                        exit();
                     } else {header("Location: login.php");}
 
                 } //else {header("Location: login.php");}
@@ -38,13 +40,12 @@
                 $result = $stmt->get_result();
                 $usuario = $result->fetch_all(MYSQLI_ASSOC);
                 if ($usuario){
-                    //Pega as informações do resultado. Agora devemos comparar a senha;                    
+                    //Pega as informações do resultado. Agora devemos comparar a senha;
                     $checasenha = password_verify($senha, $usuario[0]['senha']);
                     if ($checasenha == true){
                         //Login e Senha corretos, cria sessão
-                        echo "estou aqui";
                         $_SESSION['ID'] = $usuario[0]['ID'];
-                        return $_SESSION['ID'];
+                        header("Location: " . ROOT . "index.php");
                     } else {header("Location: login.php");}
 
                 } else {header("Location: login.php");}
@@ -64,7 +65,7 @@
                 $result = $stmt->get_result();
                 $usuario = $result->fetch_all(MYSQLI_ASSOC);
                 if ($usuario){
-                    //Pega as informações do resultado. Agora devemos comparar a senha;                    
+                    //Pega as informações do resultado. Agora devemos comparar a senha;
                     $checasenha = password_verify($senha, $usuario[0]['senha']);
                     if ($checasenha == true){
                         //Login e Senha corretos, cria sessão
@@ -111,7 +112,7 @@
         public static function authAdm($id){
             $conn = new mysqli("localhost", "root", "", "ckeep");
 
-            $permissao = 1;
+            $permissao = (int)1;
             $stmt = $conn->prepare("SELECT * FROM funcionario WHERE ID = ? AND permissao = ?");
             $stmt->bind_param('ii', $id, $permissao);
             if ($stmt->execute()){
@@ -140,9 +141,10 @@
         public static function logout($id){
             session_unset();
             session_destroy();
-            header("Location: login.php");
+            echo 'ae';
+            header("Location: " . ROOT . "login.php");
             exit();
         }
     }
-    
+
 ?>

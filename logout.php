@@ -18,7 +18,10 @@
 <?php
     $id = isset($_SESSION['ID']) ? $_SESSION['ID'] : null;
 
-    if ($id){        
+    if ($id) {
         Login::logout($id);
+    } else {
+        header("Location: " . ROOT . "login.php");
+        exit();
     }
 ?>

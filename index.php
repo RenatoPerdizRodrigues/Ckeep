@@ -1,11 +1,7 @@
 <?php
-    /*
     session_start();
-    $id = $_SESSION['ID'];
-    include_once("../../classes/Login.php");
-    $logado = Login::authAdm($id);
-    */
-    include_once("header.php");
+    include_once("classes/Login.php");
+    $logado = Login::authAdm($_SESSION['ID']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +13,8 @@
     <title>Document</title>
 </head>
 <body>
+    <?php include_once("header.php"); ?>
+
     <h1>Oi. Aqui vamos incluir informações como quantos apartamentos estão devendo, quantos estão vagos, etc.</h1>
 </body>
 </html>

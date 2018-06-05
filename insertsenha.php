@@ -1,11 +1,11 @@
 <?php
     $user = "admin";
-    $senha = "senha";
+    $senha = "admin";
     $id = 1;
     $hashPwd = password_hash($senha, PASSWORD_DEFAULT);
 
     $conn = new mysqli("localhost", "root", "", "ckeep");
-    $stmt = $conn->prepare("UPDATE condomino SET usuario = ?, senha = ? WHERE ID = ?");
+    $stmt = $conn->prepare("UPDATE funcionario SET usuario = ?, senha = ? WHERE ID = ?");
     $stmt->bind_param('ssi', $user, $hashPwd, $id);
     $stmt->execute();
 
