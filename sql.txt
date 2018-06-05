@@ -1,0 +1,149 @@
+CREATE TABLE apartamentos(
+	ID int NOT NULL AUTO_INCREMENT,
+	apartamento varchar(3) NOT NULL UNIQUE,
+	PRIMARY KEY (ID)
+);
+
+CREATE TABLE condomino(
+	ID int NOT NULL AUTO_INCREMENT,
+	nome varchar(50) NOT NULL,
+	sobrenome varchar(50) NOT NULL,
+	rg varchar(15) NOT NULL,
+	cpf int NOT NULL,
+	idade int NOT NULL,
+	tel1 int NOT NULL,
+	tel2 int NOT NULL,
+	apartamento varchar(3) NOT NULL,
+	titular smallint NOT NULL,
+	usuario varchar(35) unique,
+	senha varchar(60) unique,
+	PRIMARY KEY (ID, apartamento),
+	FOREIGN KEY (apartamento) REFERENCES apartamentos(apartamento)
+);
+
+CREATE TABLE responsavel_financeiro(
+	ID int NOT NULL,
+	apartamento varchar(3) NOT NULL,
+	statuspagamento smallint,
+	PRIMARY KEY (ID, apartamento),
+	FOREIGN KEY (ID, apartamento) REFERENCES condomino(ID, apartamento),
+	FOREIGN KEY (apartamento) REFERENCES apartamentos(apartamento)
+);
+
+CREATE TABLE funcionario(
+	ID int NOT NULL AUTO_INCREMENT,
+	nome varchar(50) NOT NULL,
+	sobrenome varchar(50) NOT NULL,
+	rg varchar(15) NOT NULL,
+	cpf int NOT NULL,
+	idade int NOT NULL,
+	tel1 int NOT NULL,
+	tel2 int NOT NULL,
+	carteiratrab int NOT NULL,
+	salario int NOT NULL,
+	cargo varchar(55) NOT NULL,
+	PRIMARY KEY (ID)
+);
+
+CREATE TABLE veiculo(
+	ID int NOT NULL AUTO_INCREMENT,
+	tipo varchar(5) NOT NULL,
+	marca varchar(25) NOT NULL,
+	modelo varchar(25) NOT NULL,
+	placa varchar(7) NOT NULL,
+	cor varchar(15) NOT NULL,
+	condominoID int NOT NULL,
+	PRIMARY KEY (ID),
+	FOREIGN KEY (condominoID) REFERENCES condomino (ID)
+);
+
+CREATE TABLE gastos(
+	ID int NOT NULL AUTO_INCREMENT,
+	datag date NOT NULL,
+	valor int NOT NULL,	
+	tipo smallint,
+	descricao varchar(240) NOT NULL,
+	PRIMARY KEY (ID, valor)
+);
+
+CREATE TABLE previsao(
+	ID int NOT NULL AUTO_INCREMENT,
+	gastosID int NOT NULL,
+	valor int NOT NULL,
+	total int NOT NULL,	
+	PRIMARY KEY (ID),
+	FOREIGN KEY (gastosID, valor) REFERENCES gastos (ID, valor)
+);
+
+CREATE TABLE aviso(
+	ID int NOT NULL AUTO_INCREMENT,
+	dataav date NOT NULL,
+	descricao varchar(240) NOT NULL,
+	PRIMARY KEY (ID)
+);
+
+CREATE TABLE reclamacao(
+	ID int NOT NULL AUTO_INCREMENT,
+	condominoID int,
+	funcionarioID int,
+	datar date NOT NULL,
+	descricao varchar(240) NOT NULL,
+	resposta varchar(240),
+	aberto smallint not null,
+	PRIMARY KEY (ID),
+	FOREIGN KEY (condominoID) REFERENCES condomino (ID),
+	FOREIGN KEY (funcionarioID) REFERENCES funcionario (ID)
+);
+
+INSERT INTO gastos (datag, valor, tipo, descricao) VALUES
+('2018-06-04', 1000, fixo, teste1),
+('2018-06-04', 200, fico, teste2);
+
+INSERT INTO apartamentos (apartamento)
+VALUES('A11'),
+('A22'),
+('A33'),
+('A44'),
+('A55'),
+('A66'),
+('A77'),
+('A88'),
+('A99');
+
+
+Algumas consultas:
+
+Selecionar o responsável financeiro do apartamento A22:
+SELECT condomino.nome FROM condomino CROSS JOIN responsavel_financeiro
+WHERE condomino.ID = responsavel_financeiro.ID AND responsavel_financeiro.apartamento = A22
+
+Selecionar o nome e ID de todos os moradores do apartamento A11:
+SELECT condomino.ID, condomino.nome FROM condomino
+WHERE apartamento = A11
+
+Selecionar o responsavel financeiro de todos os apartamentos:
+SELECT responsavel_financeiro.ID, condomino.nome FROM responsavel_financeiro CROSS JOIN condomino
+WHERE responsavel_financeiro.ID = condomino.ID
+
+
+
+SELECT Nome
+FROM apartamento CROSS JOIN condomino
+WHERE apartamento.IDcondomino = condomino.ID
+AND apartamento.NumeroApartamento = A11
+
+SELECT NumeroApartamento
+FROM apartamentos CROSS JOIN Apartamento
+
+#Não estamos implementando essa por enquanto
+CREATE TABLE moradores(
+	ID int NOT NULL AUTO_INCREMENT,
+	apartamento varchar(3) NOT NULL,
+	IDresponsavel int,
+	IDcondomino int,
+	StatusPagante bit,
+	PRIMARY KEY (ID),
+	FOREIGN KEY (IDcondomino, apartamento) REFERENCES condomino(ID, apartamento),
+	FOREIGN KEY (IDresponsavel) REFERENCES responsavel_financeiro(ID),
+	FOREIGN KEY (apartamento) REFERENCES apartamentos(apartamento)
+);

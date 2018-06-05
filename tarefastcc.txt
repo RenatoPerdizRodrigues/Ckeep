@@ -1,0 +1,14 @@
+Backend
+-Criar Consulta de Gastos(Edição e Exclusão já estão funcionando)
+-Criar Consulta, Edição e exclusão de Reclamação (parte do Usuário)
+-Criar Consulta e Resposta de Reclamação (parte do administrador)
+-Criar visualização de avisos (parte do Usuário)
+-Fazer Login/Autenticação funcionarem
+-Fazer as páginas de consulta estáticas (Páginas Iniciais e Consulta de gastos simplificados)
+
+Fron
+-Deixar o header mais bonitinho;
+-Dar uma COR e uma VIDA no site;
+-Arrumar os formulários (responsivo);
+-Montar as páginas estáticas (Regras);
+-Arrumar mensagens de sucesso/erro;
