@@ -191,6 +191,10 @@ fieldset .inline span {
 	vertical-align: middle;
 }
 
+.hamburger {
+	display: none;
+}
+
 .button {
 	width: auto;
 	color: #fff;
@@ -291,6 +295,10 @@ fieldset .inline span {
 }
 
 @media screen and (max-width: 768px) {
+	.hamburger {
+		display: block;
+	}
+
 	.header .container {
 		padding-left: 0;
 		padding-right: 0;
