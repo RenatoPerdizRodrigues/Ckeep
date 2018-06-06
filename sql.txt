@@ -95,6 +95,18 @@ CREATE TABLE reclamacao(
 	FOREIGN KEY (funcionarioID) REFERENCES funcionario (ID)
 );
 
+CREATE TABLE sessao(
+	ID varchar(60) PRIMARY KEY,
+	ip varchar(12) NOT NULL,
+	permissao smallint NOT NULL
+);
+
+INSERT INTO funcionario (nome, sobrenome, rg, cpf, idade, tel1, tel2, carteiratrab, salario, cargo, permissao) VALUES ('renato', 'rodrigues', 123, 123, 12, 123, 123, 123, 1000, 'rei', 1)
+
+INSERT INTO gastos (datag, valor, tipo, descricao) VALUES
+('2018-06-04', 1000, fixo, teste1),
+('2018-06-04', 200, fico, teste2);
+
 INSERT INTO apartamentos (apartamento)
 VALUES('A11'),
 ('A22'),
@@ -105,11 +117,6 @@ VALUES('A11'),
 ('A77'),
 ('A88'),
 ('A99');
-
-
-INSERT INTO gastos (datag, valor, tipo, descricao) VALUES
-('2018-06-04', 1000, fixo, teste1),
-('2018-06-04', 200, fico, teste2);
 
 
 Algumas consultas:

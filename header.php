@@ -55,6 +55,7 @@
 					</li>
 				</ul>
 			</li>
+			<li><a href="<?= ROOT ?>logout.php">Logout</a></li>
 		</ul>
 	</nav>
 	</div>

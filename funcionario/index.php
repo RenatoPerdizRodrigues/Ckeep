@@ -1,6 +1,8 @@
 <?php
     session_start();
-    include_once("classes/Login.php");
+    include_once("../classes/Login.php");
+    $logado = Login::authFuncionario($_SESSION['sessao']);
+    include_once("header.php");
 ?>
 
 <!DOCTYPE html>
@@ -9,19 +11,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <title>Document</title>
 </head>
 <body>
+    <h1>Oi. Aqui vamos incluir informações como reclamações respondidas e atalho para atividades realizadas.</h1>
 </body>
 </html>
-<?php
-    $id = isset($_SESSION['ID']) ? $_SESSION['ID'] : null;
-
-    if ($id) {
-        Login::logout($_SESSION['sessao']);
-    } else {
-        header("Location: " . ROOT . "login.php");
-        exit();
-    }
-?>

@@ -1,0 +1,109 @@
+/*Cor da fonte*/
+body {
+	font-family: 'Open Sans', sans-serif;
+	color: black;
+	padding: 0;
+   	margin: 0;
+}
+
+h1 {
+	font-size: 2vw;
+}
+
+.navigationDesktop {
+	background-color: #42413c;
+}
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+nav {
+	height: 40px;
+	width: 880px;
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+}
+
+nav a {
+	text-decoration: none;
+	color: white;
+	display: block;
+}
+
+nav a:hover{
+	background-color: #706e68;
+}
+
+nav ul {
+	list-style-type: none;
+}
+
+nav ul li {
+	float: left;
+	width: 140px;
+	height: 40px;
+	line-height: 40px;
+	background-color: #42413c;
+}
+
+/*Subitens*/
+nav ul ul li {
+	position: relative;
+	display: none;
+}
+
+nav ul li:hover ul li {
+	display: block;
+}
+
+/*Subsubitens*/
+
+nav ul ul ul {
+	display: none;
+}
+
+nav ul ul li:hover ul {
+	display: block;
+	position: absolute;
+	width: 140px;
+	left: 140px;
+	top: 0px;
+}
+
+/*Form*/
+.wrapper {
+	width: 100%;
+	max-width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+
+input[type=text], select, textarea{
+  width: 100%;
+  resize: vertical;
+}
+
+.env {
+	position: relative;
+	margin: auto;
+	top: 20px;
+    width: 40%;
+    border: 3px solid green;
+    padding: 10px;
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+}
+
+@media screen and (max-width: 600px) {
+  .linha2, .linha, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+  }
+}

@@ -1,10 +1,7 @@
 <?php
-    /*
     session_start();
-    $id = $_SESSION['ID'];
     include_once("../../classes/Login.php");
-    $logado = Login::authAdm($id);
-    */
+    $logado = Login::authAdm($_SESSION['sessao']);
     include_once("../../header.php");
     include_once("../../classes/Moradores.php");
 ?>

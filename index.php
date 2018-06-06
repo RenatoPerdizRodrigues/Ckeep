@@ -1,7 +1,7 @@
 <?php
     session_start();
     include_once("classes/Login.php");
-    $logado = Login::authAdm($_SESSION['ID']);
+    $logado = Login::authAdm($_SESSION['sessao']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +13,7 @@
     <title>Document</title>
 </head>
 <body>
-    <?php include_once("header.php"); ?>
+    <?php include_once("header.php");?>
 
     <h1>Oi. Aqui vamos incluir informações como quantos apartamentos estão devendo, quantos estão vagos, etc.</h1>
 </body>
