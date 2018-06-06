@@ -1,9 +1,9 @@
 <?php
     session_start();
     include_once("../../../classes/Login.php");
-    $logado = Login::authCondomino($_SESSION['ID']);
-    include_once("../header.php");
-    include_once("../../classes/Reclamacao.php");
+    $logado = Login::authCondomino($_SESSION['sessao']);
+    include_once("../../header.php");
+    include_once("../../../classes/Reclamacao.php");
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +38,7 @@
     if ($datag && $descricao){
         //Aqui usaremos o ID do usuário, de acordo com seu login, para atrelar a recalamação. Por enquatno, o ID atrelado é 1.
         if ($reclamacao = new Reclamacao($datag, $descricao, 1)){
-            $reclamacao->insertCondomino(1);
+            $reclamacao->insertCondomino($_SESSION['ID']);
             //$reclamacao->insertFuncionario(1);
         header("Location: consultareclamacao.php");
         }

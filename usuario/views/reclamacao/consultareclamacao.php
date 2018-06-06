@@ -1,11 +1,9 @@
 <?php
-        /*session_start();
-    if (!defined('ROOT')) define('ROOT', 'localhost/ckeep/');
-    include_once("../classes/Login.php");
-    $id = $_SESSION['ID'];
-    $logado = Login::authCondomino($id);*/
-    include_once("../../header.php");
-    include_once("../../classes/Reclamacao.php");
+        session_start();
+        include_once("../../../classes/Login.php");
+        $logado = Login::authCondomino($_SESSION['sessao']);
+        include_once("../../header.php");
+    include_once("../../../classes/Reclamacao.php");
     $id = (isset($_GET['id'])) ? $_GET['id'] : null;
 ?>
 
