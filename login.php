@@ -13,22 +13,30 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form class="wrapper" method="POST" action="login.php">
-        <fieldset>
-            <legend>Login</legend>
-            <label>Tipo de Usuário</label>
-            <select name="tipo">
-                <option value="condomino">Condômino</option>
-                <option value="funcionario">Funcionário</option>
-                <option value="administrador">Administrador</option>
-            </select>
-            <label>Usuário</label>
-            <input type="text" name="usuario">
-            <label>Senha</label>
-            <input type="password" name="senha"><br>
-            <input type="submit">
-        </fieldset>
-    </form>
+    <div class="login">
+        <form class="wrapper" method="POST" action="login.php">
+            <fieldset>
+                <legend>Login</legend>
+                <div>
+                    <label>Tipo de Usuário</label>
+                    <select name="tipo">
+                        <option value="condomino">Condômino</option>
+                        <option value="funcionario">Funcionário</option>
+                        <option value="administrador">Administrador</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Usuário</label>
+                    <input type="text" name="usuario">
+                </div>
+                <div>
+                    <label>Senha</label>
+                    <input type="password" name="senha"><br>
+                </div>
+                <input type="submit" value="Logar" class="button">
+            </fieldset>
+        </form>
+    </div>
 </body>
 </html>
 <?php
@@ -56,5 +64,5 @@
         }
     } elseif(isset($_SESSION['sessao'])){ echo "Você já está logado!"; }
 
-    
+
 ?>

@@ -9,7 +9,7 @@ body {
 	overflow-x: hidden;
 }
 
-h1 {
+.header h1 {
 	color: #fff;
 }
 
@@ -148,6 +148,7 @@ textarea {
 
 fieldset {
 	border: 0;
+	width: 100%;
 }
 
 fieldset legend {
@@ -159,6 +160,7 @@ fieldset legend {
 	float: left;
 }
 
+fieldset select,
 fieldset input {
 	display: block;
 	width: 100%;
@@ -174,6 +176,12 @@ fieldset input {
 	padding: 4px 8px;
 	background: 0 0;
 	margin-top: 2px;
+}
+
+fieldset input[type="radio"] {
+	height: auto;
+	line-height: initial;
+	min-height: auto;
 }
 
 fieldset label {
@@ -286,6 +294,27 @@ fieldset .inline span {
 
 .hamburger:hover {
 	cursor: pointer;
+}
+
+.login {
+	width: 100%;
+	max-width: 500px;
+	margin: 32px auto;
+	padding: 15px 15px 32px;
+	background: #fff;
+}
+
+.lookup {
+	width: 100%;
+	max-width: 500px;
+	margin: 32px auto;
+	padding: 15px 15px 32px;
+	background: #fff;
+}
+
+.m-y-32 {
+	margin-top: 32px;
+	margin-bottom: 32px;
 }
 
 @media screen and (max-width: 795px) {

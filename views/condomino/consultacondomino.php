@@ -16,20 +16,22 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="consultacondomino.php">
-        <fieldset>
-        <legend>Consulta de Usuário</legend>
-        <label>Qual o método de pesquisa?</label>
-            <select name="tipoconsulta">
-                <option value="nome">Nome</option>
-                <option value="rg">RG</option>
-            </select><br>
-            <label>Conteúdo</label>
-            <input type="text" name="conteudo"><br><br>
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="lookup">
+        <div class="wrapper">
+            <form method="POST" action="consultacondomino.php">
+            <fieldset>
+            <legend>Consulta de Usuário</legend>
+            <label>Qual o método de pesquisa?</label>
+                <select name="tipoconsulta">
+                    <option value="nome">Nome</option>
+                    <option value="rg">RG</option>
+                </select><br>
+                <label>Conteúdo</label>
+                <input type="text" name="conteudo"><br><br>
+                <input type="submit" value="Buscar" class="button">
+            </fieldset>
+            </form>
+        </div>
     </div>
 </body>
 </html>

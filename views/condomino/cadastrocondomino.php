@@ -20,7 +20,7 @@
         include_once("../../header.php");
     ?>
 
-    <div class="container bg-white">
+    <div class="container m-y-32 bg-white">
         <div class="wrapper">
             <form method="POST" action="cadastrocondomino.php">
                 <fieldset>
