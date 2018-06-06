@@ -40,7 +40,7 @@
         switch($tipo){
 
         case 'condomino':
-            Login::checkUserLogin($usuario, $senha)
+            Login::checkUserLogin($usuario, $senha);
             exit();
             break;
 

@@ -1,9 +1,8 @@
 <?php
-    // session_start();
-    // $id = $_SESSION['ID'];
-    // include_once("../../classes/Login.php");
-    // $logado = Login::authAdm($id);
-    include_once("../../header.php");
+    session_start();
+    $id = $_SESSION['ID'];
+    include_once("../../classes/Login.php");
+    $logado = Login::authAdm($id);
     include_once("../../classes/Condomino.php");
 ?>
 
@@ -17,33 +16,73 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="cadastrocondomino.php">
-        <fieldset>
-        <legend>Cadastro de Funcionário</legend>
-            <label>Nome*</label>
-            <input required type="text" name="nome"><br>
-            <label>Sobrenome*</label>
-            <input required type="text" name="sobrenome"><br>
-            <label>RG*</label>
-            <input required type="text" name="rg"><br>
-            <label>CPF*</label>
-            <input required type="text" name="cpf"><br>
-            <label>Idade*</label>
-            <input required type="number" name="idade"><br>
-            <label>Telefone 1*</label>
-            <input required type="number" name="tel1"><br>
-            <label>Telefone 2</label>
-            <input type="number" name="tel2"><br>
-            <label>Apartamento*</label>
-            <input required type="text" name="apartamento"><br>
-            <label>É titular do apartamento?*</label>
-            <input required type="radio" name="titular" value="1"> Sim
-            <input required type="radio" name="titular" value="0"> Não<br>
-            <input type="submit">
-        </fieldset>
-        </form>
+    <?php
+        include_once("../../header.php");
+    ?>
+
+    <div class="container bg-white">
+        <div class="wrapper">
+            <form method="POST" action="cadastrocondomino.php">
+                <fieldset>
+                    <legend>Cadastro de Funcionário</legend>
+                    <div>
+                        <label>Nome*</label>
+                        <input required type="text" name="nome"><br>
+                    </div>
+                    <div>
+                        <label>Sobrenome*</label>
+                        <input required type="text" name="sobrenome"><br>
+                    </div>
+                    <div class="twoFields">
+                        <div>
+                            <label>RG*</label>
+                            <input required type="text" name="rg"><br>
+                        </div>
+                        <div>
+                            <label>CPF*</label>
+                            <input required type="text" name="cpf"><br>
+                        </div>
+                    </div>
+                    <div class="threeFields">
+                        <div>
+                            <label>Idade*</label>
+                            <input required type="number" name="idade"><br>
+                        </div>
+
+                        <div>
+                            <label>Telefone 1*</label>
+                            <input required type="number" name="tel1"><br>
+                        </div>
+
+                        <div>
+                            <label>Telefone 2</label>
+                            <input type="number" name="tel2"><br>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Apartamento*</label>
+                        <input required type="text" name="apartamento"><br>
+                    </div>
+                    <div>
+                        <label>É titular do apartamento?*</label>
+                        <div class="twoCheckboxes">
+                            <div class="inline m-r-16">
+                                <input required type="radio" name="titular" value="1"> <span>Sim</span>
+                            </div>
+                            <div class="inline">
+                                <input required type="radio" name="titular" value="0"> <span>Não</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" class="button m-t-16" value="Cadastrar">
+                </fieldset>
+            </form>
+        </div>
     </div>
+
+    <?php
+        include_once("../../footer.php");
+    ?>
 </body>
 </html>
 <?php
