@@ -1,10 +1,7 @@
 <?php
-    /*
     session_start();
-    $id = $_SESSION['ID'];
     include_once("../../classes/Login.php");
-    $logado = Login::authAdm($id);
-    */
+    $logado = Login::authAdm($_SESSION['sessao']);
     include_once("../../header.php");
     include_once("../../classes/Gasto.php");
     include_once("../../classes/Previsao.php");
@@ -31,9 +28,9 @@
             <input required type="number" name="valor"><br>
             <label>Tipo*</label>
             <select name="tipo">
-                <option value="fixo">Fixo</option>
-                <option value="extraordinario">Extraordinário</option>
-                <option value="atividade">Atividade</option>
+                <option value="1">Fixo</option>
+                <option value="2">Extraordinário</option>
+                <option value="3">Atividade</option>
             </select>
             <label>Descrição*</label>
             <input required type="textarea" name="descricao"><br>

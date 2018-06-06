@@ -36,7 +36,7 @@
     $senha = isset($_POST['senha']) ? $_POST['senha'] : null;
     $tipo = isset($_POST['tipo']) ? $_POST['tipo'] : null;
 
-    if ($usuario && $senha && $tipo){
+    if ($usuario && $senha && $tipo && !isset($_SESSION['sessao'])){
         switch($tipo){
 
         case 'condomino':
@@ -54,5 +54,7 @@
             exit();
             break;
         }
-    }
+    } elseif(isset($_SESSION['sessao'])){ echo "Você já está logado!"; }
+
+    
 ?>
