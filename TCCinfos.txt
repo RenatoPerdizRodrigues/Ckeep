@@ -1,0 +1,3 @@
+Administrador: admin/admin
+Condômino: antoniockeep@hotmail.com/a de sempre
+Funcionario: 

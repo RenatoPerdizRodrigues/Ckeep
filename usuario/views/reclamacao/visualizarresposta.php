@@ -29,32 +29,21 @@
                 <input type="hidden" name="id" value="<?= $_GET['id']; ?>">
             <div>
                 <label>Data*</label>
-                <input required type="hidden" name="datag" value="<?= date('Y-m-d') ?>"><br>
-                <input required type="data" value="<?= date('Y-m-d') ?>" disabled><br>
+                <input disabled required type="hidden" name="datag" value="<?= date('Y-m-d') ?>"><br>
+                <input disabled required type="data" value="<?= date('Y-m-d') ?>" disabled><br>
             </div>
             <div>
                 <label>Descrição*</label>
-                <input required type="textarea" name="descricao" value="<?= $reclamacao[0]['descricao']; ?>"><br>
+                <input disabled required type="textarea" name="descricao" value="<?= $reclamacao[0]['descricao']; ?>"><br>
             </div>
-                <input type="submit" class="button" value="Enviar">
+            <div>
+                <label>Resposta*</label>
+                <input disabled required type="textarea" name="descricao" value="<?= $reclamacao[0]['resposta']; ?>"><br>
+            </div>
             </fieldset>
             </form>
         </div>
     </div>
 </html>
-<?php
-    $descricao = isset($_POST['descricao']) ? $_POST['descricao'] : null;
-    $datag = isset($_POST['datag']) ? $_POST['datag'] : null;
-    $id = isset($_POST['id']) ? $_POST['id'] : null;
 
-    if ($datag && $descricao && $id){
-        if ($reclamacao = new Reclamacao($datag, $descricao, 1)){
-            $reclamacao->update($id);
-            header("Location: consultareclamacao.php");
-            exit();
-        }
-    }
-
-    include_once("../../../footer.php");
-?>
 </body>

@@ -16,16 +16,21 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="consultamoradores.php">
-        <fieldset>
-        <legend>Consultar moradores por apartamento</legend>
-        <label>Apartamento</label>
-        <input type="text" name="apartamento"><br><br>
-        <input type="submit">
-        </fieldset>
-        </form>
+    <div class="lookup">
+        <div class="wrapper">
+            <form method="POST" action="consultamoradores.php">
+            <fieldset>
+            <legend>Consultar moradores</legend>
+            <label>Apartamento</label>
+            <input type="text" name="apartamento"><br><br>
+            <input type="submit">
+            </fieldset>
+            </form>
+        </div>
     </div>
+<?php
+    include_once("../../footer.php");
+?>
 </body>
 </html>
 <?php

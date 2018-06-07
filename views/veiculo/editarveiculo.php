@@ -9,7 +9,7 @@
         $id = $_GET['id'];
         $result = Veiculo::search($id, 'ID');
         $veiculo = $result->fetch_all(MYSQLI_ASSOC);       
-    } //else header("Location: consultafuncionario.php");
+    } else header("Location: consultaveiculo.php?msg=1");
 ?>
 
 <!DOCTYPE html>
@@ -22,26 +22,42 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="<?= 'editarveiculo.php?id='.$veiculo[0]['ID']; ?>">
-        <fieldset>
-        <legend>Edição de Veículo</legend>        
-            <input type="hidden" name="id" value="<?= $veiculo[0]['ID']; ?>">
-            <input type="hidden" name="proprietario" value="<?= $veiculo[0]['condominoID']; ?>">
-            <label>Tipo</label>
-            <input type="text" name="tipo" value="<?= $veiculo[0]['tipo']; ?>"><br>
-            <label>Marca</label>
-            <input type="text" name="marca" value="<?= $veiculo[0]['marca']; ?>"><br>
-            <label>Modelo</label>
-            <input type="text" name="modelo" value="<?= $veiculo[0]['modelo']; ?>"><br>
-            <label>Placa</label>
-            <input type="text" name="placa" value="<?= $veiculo[0]['placa']; ?>"><br>
-            <label>Cor</label>
-            <input type="text" name="cor" value="<?= $veiculo[0]['cor']; ?>"><br>
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="container m-y-32 bg-white">
+        <div class="wrapper">
+            <form method="POST" action="<?= 'editarveiculo.php?id='.$veiculo[0]['ID']; ?>">
+            <fieldset>
+            <legend>Edição de Veículo</legend>        
+                <input type="hidden" name="id" value="<?= $veiculo[0]['ID']; ?>">
+                <input type="hidden" name="proprietario" value="<?= $veiculo[0]['condominoID']; ?>">
+            <div>
+                <label>Tipo</label>
+                <input type="hidden" name="tipo" value="<?= $veiculo[0]['tipo']; ?>"><br>
+                <input disabled type="text" name="tipo" value="<?= $veiculo[0]['tipo']; ?>"><br>
+            </div>
+            <div>
+                <label>Marca</label>
+                <input type="text" name="marca" value="<?= $veiculo[0]['marca']; ?>"><br>
+            </div>
+            <div>
+                <label>Modelo</label>
+                <input type="text" name="modelo" value="<?= $veiculo[0]['modelo']; ?>"><br>
+            </div>
+            <div>
+                <label>Placa</label>
+                <input type="text" name="placa" value="<?= $veiculo[0]['placa']; ?>"><br>
+            </div>
+            <div>
+                <label>Cor</label>
+                <input type="text" name="cor" value="<?= $veiculo[0]['cor']; ?>"><br>
+            </div>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
+<?php
+    include_once("../../footer.php");
+?>
 </body>
 </html>
 <?php
@@ -57,6 +73,7 @@
         //Veiculo($tipo, $marca, $modelo, $placa, $cor, $proprietario){
         $veiculo = new Veiculo($tipo, $marca, $modelo, $placa, $cor, $proprietario);
         $veiculo->update($id);
-        header("Location: consultaveiculo.php");
+        header("Location: consultaveiculo.php?msg=1");
+        exit();
     }
 ?>

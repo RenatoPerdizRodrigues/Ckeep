@@ -22,27 +22,40 @@
     <title>Document</title>
 </head>
 <body>
-<div class="wrapper">
-    <form method="POST" action="editargasto.php">
-        <fieldset>
-        <legend>Cadastro de Gasto</legend>
-            <input type="hidden" name="id" value="<?= $id = $_GET['id'] ?>">
-            <label>Data*</label>
-            <input required type="date" name="datag" value="<?= $usuario[0]['datag'] ?>"><br>
-            <label>Valor*</label>
-            <input required type="number" name="valor" value="<?= $usuario[0]['valor'] ?>"><br>
-            <label>Tipo*</label>
-            <select name="tipo">
-                <option <?php if($usuario[0]['tipo'] == "1"){echo "selected";} ?> value="1">Fixo</option>
-                <option <?php if($usuario[0]['tipo'] == "2"){echo "selected";} ?> value="2">Extraordinário</option>
-                <option <?php if($usuario[0]['tipo'] == "3"){echo "selected";} ?> value="3">Atividade</option>
-            </select>
-            <label>Descrição*</label>
-            <input required type="textarea" name="descricao" value="<?= $usuario[0]['descricao'] ?>"><br>
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="container m-y-32 bg-white">
+        <div class="wrapper">
+            <form method="POST" action="editargasto.php">
+            <fieldset>
+            <legend>Cadastro de Gasto</legend>
+                <input type="hidden" name="id" value="<?= $id = $_GET['id'] ?>">
+            <div>
+                <label>Data*</label>
+                <input required type="date" name="datag" value="<?= $usuario[0]['datag'] ?>"><br>
+            </div>
+            <div>
+                <label>Valor*</label>
+                <input required type="number" name="valor" value="<?= $usuario[0]['valor'] ?>"><br>
+            </div>
+            <div>
+                    <label>Tipo*</label>
+                    <select name="tipo">
+                        <option <?php if($usuario[0]['tipo'] == "1"){echo "selected";} ?> value="1">Fixo</option>
+                        <option <?php if($usuario[0]['tipo'] == "2"){echo "selected";} ?> value="2">Extraordinário</option>
+                        <option <?php if($usuario[0]['tipo'] == "3"){echo "selected";} ?> value="3">Atividade</option>
+                    </select><br>
+            </div>
+            <div>
+                <label>Descrição*</label>
+                <input required type="textarea" name="descricao" value="<?= $usuario[0]['descricao'] ?>"><br>
+            </div>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
+<?php
+    include_once("../../footer.php");
+?>
 </body>
 </html>
 <?php

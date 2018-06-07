@@ -1,14 +1,13 @@
 Backend
--Criar Consulta de Gastos(Edição e Exclusão já estão funcionando)
--Criar Consulta, Edição e exclusão de Reclamação (parte do Usuário)
--Criar Consulta e Resposta de Reclamação (parte do administrador)
--Criar visualização de avisos (parte do Usuário)
--Fazer Login/Autenticação funcionarem
--Fazer as páginas de consulta estáticas (Páginas Iniciais e Consulta de gastos simplificados)
+-Fazer a pï¿½gina de ediï¿½ï¿½o de cadastro prï¿½prio (usuï¿½rio e funcionï¿½rio, incluindo alterar email ou senha)
+-Inserir escolha de administrador ou nï¿½o no cadastro de funcionï¿½rio
+-Alterar a pesquisa de datas para apenas mÃªs e ano
+-Status de pagamento tambÃ©m deve resetar a cada mÃªs
+-Impedir que o usuÃ¡rio logado acesse a tela de login, fazer com que redirecione para a respectiva pÃ¡gina de index
+-Checar se todas as funcionalidades estÃ£o funcionando
 
-Fron
--Deixar o header mais bonitinho;
--Dar uma COR e uma VIDA no site;
--Arrumar os formulários (responsivo);
--Montar as páginas estáticas (Regras);
+Front
+-Deixar o header funcional;
+-Arrumar os formulï¿½rios (responsivo);
+-Montar as pï¿½ginas estï¿½ticas (Regras);
 -Arrumar mensagens de sucesso/erro;

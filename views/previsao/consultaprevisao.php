@@ -7,8 +7,8 @@
     include_once("../../classes/Previsao.php");
     include_once("../../classes/Funcionario.php");
     $datag = (isset($_GET['datag'])) ? $_GET['datag'] : date('Y-m-d');
-    $acao = isset($_GET['acao']) ? $_GET['acao'] : null;
-?>
+    $acao = isset($_GET['acao']) ? $_GET['acao'] : null;    
+    ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,16 +20,25 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="GET" action="consultaprevisao.php">
-        <fieldset>
-        <legend>Consulta de Mês e ano para Previsão de Gastos</legend>
-        <label>Mês/Ano</label>
-            <input type="date" name="datag">
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="lookup">
+        <div class="wrapper">
+            <form method="GET" action="consultaprevisaoanterior.php">
+            <fieldset>
+            <legend>Consulta de Mês e Ano para Previsão de Gastos</legend>
+            <label>Mês/Ano</label>
+                <input type="date" name="datag"><br>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
+    <?php
+        //if ($datag > date('Y-m-d')){
+        //    echo "Não há previsão disponível para o mês selecionado!";
+        //    exit();
+        //}
+    ?>
+
     <br><h2>Previsão de Gastos para <?= $datag; ?></h2><br>
     <table class=wrapper>
     <tr>
@@ -43,8 +52,14 @@
 </body>
 </html>
 <?php
+    //Verificamos se a data inserida é a padrão, anterior ou posterior
+    if ($datag > date('Y-m-d')){
+        echo "Usuário quer visualizar gastos futuros";
+    } elseif($datag < date('Y-m-d')){
+        echo "Usuário quer visualizar gastos passados";
+    } else {
     $total = 0;
-    if ($datag){
+    
         $result = Previsao::searchAllGastos($datag);
         $gastos = $result->fetch_all(MYSQLI_ASSOC);
         foreach ($gastos as $gastos){
@@ -85,5 +100,14 @@
             header("Location: consultaprevisao.php");
             exit();
         }
+    }
+
+
+    //Função para verificar se é dia primeiro, para ativar ou não o fechamento de gastos
+    $diahoje = date("d",strtotime(date('Y-m-d')));
+    if ($diahoje === '01'){
+        echo "entrou aqui";
+        //Enviaria o datag para fechar o mês anterior, mas no caso enviamos algo manualmente
+        //Previsao::fecharGastos($total, '2018-07-01');
     }
 ?>

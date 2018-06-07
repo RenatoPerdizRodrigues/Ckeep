@@ -16,15 +16,19 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="consultaaviso.php">
-        <fieldset>
-        <legend>Consulta de Avisos por Mês e Ano</legend>
-        <label>Mês/Ano</label>
-            <input type="date" name="datag">
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="lookup">
+        <div class="wrapper">
+            <form method="POST" action="consultaaviso.php">
+            <fieldset>
+            <legend>Consulta de Avisos por Mês e Ano</legend>
+            <div>
+                <label>Mês/Ano</label>
+                    <input type="date" name="datag"><br>
+            </div>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
 <?php
     $datag = (isset($_POST['datag'])) ? $_POST['datag'] : null;
@@ -58,3 +62,7 @@
         }
     }
 ?>
+<?php
+    include_once("../../footer.php");
+?>
+</body>

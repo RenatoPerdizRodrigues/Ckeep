@@ -20,28 +20,43 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="<?= "cadastroveiculo.php?id=".$id ?>">
-        <fieldset>
-        <legend>Cadastro de Veículo</legend>        
-            <input type="hidden" name="condominoid" value="<?= $id; ?>">
-            <label>Tipo</label>
-            <select required name="tipo">
-                <option value="carro">Carro</option>
-                <option value="moto">Moto</option>
-            </select>
-            <label>Marca</label>
-            <input required type="text" name="marca"><br>
-            <label>Modelo</label>
-            <input required type="text" name="modelo"><br>
-            <label>Placa</label>
-            <input required type="text" name="placa"><br>
-            <label>Cor</label>
-            <input required type="text" name="cor"><br>
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="container m-y-32 bg-white">
+        <div class="wrapper">
+            <form method="POST" action="<?= "cadastroveiculo.php?id=".$id ?>">
+            <fieldset>
+            <legend>Cadastro de Veículo</legend>        
+                <input type="hidden" name="condominoid" value="<?= $id; ?>">
+            <div>
+                <label>Tipo</label>
+                <select required name="tipo">
+                    <option value="Carro">Carro</option>
+                    <option value="Moto">Moto</option>
+                </select><br>
+            </div>
+            <div>
+                <label>Marca</label>
+                <input required type="text" name="marca"><br>
+            </div>
+            <div>
+                <label>Modelo</label>
+                <input required type="text" name="modelo"><br>
+            </div>
+            <div>
+                <label>Placa</label>
+                <input required type="text" name="placa"><br>
+            </div>
+            <div>
+                <label>Cor</label>
+                <input required type="text" name="cor"><br>
+            </div>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
+<?php
+    include_once("../../footer.php");
+?>
 </body>
 </html>
 <?php

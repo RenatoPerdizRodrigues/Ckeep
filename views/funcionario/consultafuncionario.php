@@ -16,22 +16,27 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="consultafuncionario.php">
-        <fieldset>
-        <legend>Consulta de Funcionário</legend>
-        <label>Qual o método de pesquisa?</label>
-            <select name="tipoconsulta">
-                <option value="nome">Nome</option>
-                <option value="rg">RG</option>
-                <option value="cargo">Cargo</option>
-            </select><br>
-            <label>Conteúdo</label>
-            <input type="text" name="conteudo"><br><br>
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="lookup">
+        <div class="wrapper">
+            <form method="POST" action="consultafuncionario.php">
+            <fieldset>
+            <legend>Consulta de Funcionário</legend>
+            <label>Qual o método de pesquisa?</label>
+                <select name="tipoconsulta">
+                    <option value="nome">Nome</option>
+                    <option value="rg">RG</option>
+                    <option value="cargo">Cargo</option>
+                </select><br>
+                <label>Conteúdo</label>
+                <input type="text" name="conteudo"><br><br>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
+    <?php
+        include_once("../../footer.php");
+    ?>
 </body>
 </html>
 <?php
@@ -68,13 +73,29 @@
                 <td>".$key['tel2']."</td>
                 <td>".$key['carteiratrab']."</td>
                 <td>".$key['salario']."</td>
-                <td>".$key['cargo']."</td>
-                <td><a href=\"editarfuncionario.php?id=".$key['ID']."\">Editar</a><br><a href=\"?id=".$key['ID']."&acao=excluir\">Excluir</a></td>
-            </tr>";
+                <td>".$key['cargo']."</td>";
+
+                //Checa se o usuário é administrador ou não
+
+                if ($key['permissao'] == 0){
+                    echo "<td><a href=\"editarfuncionario.php?id=".$key['ID']."\">Editar</a><br><a href=\"?id=".$key['ID']."&acao=excluir\">Excluir</a><a href=\"?id=".$key['ID']."&acao=administrador\">Dar privilégios administrativos</a></td>
+                    </tr>";
+                } elseif($key['permissao'] == 1){
+                    echo "<td><a href=\"editarfuncionario.php?id=".$key['ID']."\">Editar</a><br><a href=\"?id=".$key['ID']."&acao=excluir\">Excluir</a><a href=\"?id=".$key['ID']."&acao=funcionario\">Remover privilégios administrativos</a></td>
+                    </tr>";
+                }
         }
         echo "</table>";
     }
     if ($acao == 'excluir'){
         $result = Funcionario::delete($_GET['id']);
+    }
+
+    if ($acao == 'administrador'){
+        $result = Funcionario::adicionarPrivilegiosAdministrativos($_GET['id']);
+    }
+
+    if ($acao == 'funcionario'){
+        $result = Funcionario::removerPrivilegiosAdministrativos($_GET['id']);
     }
 ?>

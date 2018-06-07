@@ -48,35 +48,28 @@
         }
 
         /*Função de inserção de funcionário, chamada por um objeto Funcionário.*/
-        public function insertCondomino($id){
+        public function insert($id, $table){
             $data = $this->getData();
             $descricao = $this->getDescricao();
             $aberto = $this->getAberto();
 
-            echo "<br>".$data."<br>";
-            echo "<br>".$descricao."<br>";
-            echo "<br>".$aberto."<br>";
-
             $conn = $this->connectDB();
-            $stmt = $conn->prepare("INSERT INTO reclamacao (condominoID, datar, descricao, aberto) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param('issi', $id, $data, $descricao, $aberto);
-            
-            if ($stmt->execute()){
-                echo "Inserido com sucesso!";
-            } else echo $stmt->error;
-        }
-
-        public function insertFuncionario($id){
-            $data = $this->getData();
-            $descricao = $this->getDescricao();
-            $aberto = $this->getAberto();
-            $conn = $this->connectDB();
-            $stmt = $conn->prepare("INSERT INTO reclamacao (funcionarioID, datar, descricao, aberto) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param('issi', $id, $data, $descricao, $aberto);
-            
-            if ($stmt->execute()){
-                echo "Inserido com sucesso!";
-            } else echo $stmt->error;
+            //Checa em qual tabela será inserido
+            if ($table == "condominoID"){
+                $stmt = $conn->prepare("INSERT INTO reclamacao (condominoID, datar, descricao, aberto) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param('issi', $id, $data, $descricao, $aberto);
+                
+                if ($stmt->execute()){
+                    echo "Inserido com sucesso!";
+                } else echo $stmt->error;
+            } elseif ($table == "funcionarioID"){
+                $stmt = $conn->prepare("INSERT INTO reclamacao (funcionarioID, datar, descricao, aberto) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param('issi', $id, $data, $descricao, $aberto);
+                
+                if ($stmt->execute()){
+                    echo "Inserido com sucesso!";
+                } else echo $stmt->error;
+            }
         }
 
         /*Função estática para poder ser acessada sem a criação de um objeto.
@@ -86,13 +79,31 @@
 
         public static function search($conteudo, $tipo){
             $conn = new mysqli("localhost", "root", "", "ckeep");     
-                $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE $tipo=?");
-                $stmt->bind_param('s', $conteudo);
+            $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE $tipo=?");
+            $stmt->bind_param('s', $conteudo);
                     if ($stmt->execute()){ 
                             $result = $stmt->get_result();
                             return $result;
-                        }
-        }        
+                    }else echo $stmt->error;
+        }
+
+        public static function listAllOpen(){
+            $conn = new mysqli("localhost", "root", "", "ckeep");     
+            $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE aberto = 1");
+            if ($stmt->execute()){ 
+                $result = $stmt->get_result();
+                return $result;
+            }
+        }
+
+        public static function listAllClosed(){
+            $conn = new mysqli("localhost", "root", "", "ckeep");     
+            $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE aberto = 0");
+            if ($stmt->execute()){ 
+                $result = $stmt->get_result();
+                return $result;
+            }
+        }
 
         /*Função de exclusão, que não permite a exclusão de usuário
         caso o mesmo seja responsável financeiro por algum apartamento.*/
@@ -101,8 +112,8 @@
             $stmt = $conn->prepare("DELETE FROM reclamacao WHERE ID = ?");
             $stmt->bind_param('i', $id);
             if ($stmt->execute()){
-                $result = $stmt->get_result();
-                return $result;
+                header("Location: consultareclamacao.php");
+                exit();
             } else echo $stmt->error;
         }
 
@@ -111,7 +122,7 @@
             $data = $this->getData();
             $descricao = $this->getDescricao();
             $conn = $this->connectDB();
-            $stmt = $conn->prepare("UPDATE aviso SET dataav = ?, descricao = ? WHERE ID = ?");
+            $stmt = $conn->prepare("UPDATE reclamacao SET datar = ?, descricao = ? WHERE ID = ?");
             $stmt->bind_param('ssi', $data, $descricao, $id);
 
             if ($stmt->execute()){
@@ -119,6 +130,51 @@
             } else echo $stmt->error;
         }
 
+        public static function fechar($id){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $aberto = 0;
+            $stmt = $conn->prepare("UPDATE reclamacao SET aberto = ? WHERE ID = ?");
+            $stmt->bind_param('ii', $aberto, $id);
+
+            if ($stmt->execute()){
+                header("Location: consultareclamacao.php");
+            } else echo $stmt->error;
+        }
         
+        public static function reabrir($id){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $aberto = 1;
+            $stmt = $conn->prepare("UPDATE reclamacao SET aberto = ? WHERE ID = ?");
+            $stmt->bind_param('ii', $aberto, $id);
+
+            if ($stmt->execute()){
+                header("Location: consultareclamacaofechada.php");
+            } else echo $stmt->error;
+        }
+
+        public static function responder($id, $resposta){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $stmt = $conn->prepare("UPDATE reclamacao SET resposta = ? WHERE ID = ?");
+            $stmt->bind_param('si', $resposta, $id);
+
+            if ($stmt->execute()){
+                $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE ID = ?");
+                $stmt->bind_param('i', $id);
+                if ($stmt->execute()){
+                    $result = $stmt->get_result();
+                    $aberto = $result->fetch_all(MYSQLI_ASSOC);
+
+                    var_dump($aberto);
+
+                    //Decide se o usuário será redirecionado para a página de reclamações abertas ou fechadas de acordo com o status da alterada
+                    if (($aberto[0]['aberto'] == 1)){
+                        //Está aberta
+                        header("Location: consultareclamacao.php");
+                    } else header("Location: consultareclamacaofechada.php");
+                    
+                }
+                
+            } else echo $stmt->error;
+        }
 }
 ?>

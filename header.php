@@ -4,12 +4,13 @@
 	<div class="header">
 		<div class="container">
 			<div class="titleBar">
-				<h1>Logo</h1>
-
+				<h1>CKeep</h1>
+				<div class="rightSide"><a class="button buttonLogout" href="<?= ROOT ?>logout.php">Logout</a> 
 				<div class="hamburger">
 					<span class="line"></span>
 					<span class="line"></span>
 					<span class="line"></span>
+				</div>
 				</div>
 			</div>
 
@@ -57,7 +58,12 @@
 						</li>
 						<li><a href="#">Comunicação</a>
 							<ul>
-								<li><a href="<?= ROOT ?>">Reclamações</a></li>
+								<li><a href="<?= ROOT ?>">Reclamações</a>
+									<ul>
+										<li><a href="<?= ROOT ?>views/reclamacao/consultareclamacao.php">Abertas</a></li>
+										<li><a href="<?= ROOT ?>views/reclamacao/consultareclamacaofechada.php">Fechadas</a></li>
+									</ul> 
+								</li>
 								<li><a href="<?= ROOT ?>">Avisos</a>
 									<ul>
 										<li><a href="<?= ROOT ?>views/aviso/cadastroaviso.php">Cadastrar</a></li>
@@ -66,7 +72,6 @@
 								</li>
 							</ul>
 						</li>
-						<li><a href="<?= ROOT ?>logout.php">Logout</a></li>
 					</ul>
 				</nav>
 			</div>

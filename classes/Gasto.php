@@ -56,7 +56,7 @@
             $descricao = $this->getDescricao();
             $conn = $this->connectDB();
             $stmt = $conn->prepare("INSERT INTO gastos (datag, valor, tipo, descricao) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param('siis', $data, $valor, $tipo, $descricao);
+            $stmt->bind_param('siss', $data, $valor, $tipo, $descricao);
             
             if ($stmt->execute()){
                 echo "Inserido com sucesso!";
@@ -67,14 +67,29 @@
         Recebe como parâmetro o tipo de dado a ser comparado na tabela
         e seu conteúdo. Caso seja procura por Nome, divide o conteúdo entre Nome e Sobrenome,
         e busca utilizando AND e LIKE.*/
-        public static function search($conteudo, $tipo){
+        public static function search($tipo){
             $conn = new mysqli("localhost", "root", "", "ckeep");     
-                $stmt = $conn->prepare("SELECT * FROM gastos WHERE $tipo=?");
-                $stmt->bind_param('s', $conteudo);
+                $stmt = $conn->prepare("SELECT * FROM gastos WHERE tipo = ?");
+                $stmt->bind_param('s', $tipo);
                     if ($stmt->execute()){ 
                             $result = $stmt->get_result();
                             return $result;
                         }
+        }
+
+        public static function countGastoTotal(){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+                                    
+            $stmt = $conn->prepare("SELECT * FROM gastos");
+            if ($stmt->execute()){ 
+                $contagem = 0;
+                $result = $stmt->get_result();
+                $status = $result->fetch_all(MYSQLI_ASSOC);
+                foreach($status as $status){
+                    $contagem += $status['valor'];
+                }
+                return $contagem;
+            }               
         }
 
         /*Função de exclusão, que não permite a exclusão de usuário

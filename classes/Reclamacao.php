@@ -96,6 +96,51 @@
                         }
         }
 
+        public static function countReclamacao(){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+                                    
+            $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE aberto = 1");
+            if ($stmt->execute()){ 
+                $contagem = 0;
+                $result = $stmt->get_result();
+                $status = $result->fetch_all(MYSQLI_ASSOC);
+                foreach($status as $status){
+                    $contagem++;
+                }
+                return $contagem;
+            }               
+        }
+
+        public static function countReclamacaoUsuario($id, $table){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+                                    
+            if ($table == 'condominoID'){
+                $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE aberto = 1 AND condominoID = ?");
+                $stmt->bind_param('s', $id);
+                if ($stmt->execute()){ 
+                    $contagem = 0;
+                    $result = $stmt->get_result();
+                    $status = $result->fetch_all(MYSQLI_ASSOC);
+                    foreach($status as $status){
+                        $contagem++;
+                    }
+                    return $contagem;
+                }               
+            } elseif ($table == 'funcionarioID'){
+                $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE aberto = 1 AND funcionarioID = ?");
+                $stmt->bind_param('s', $id);
+                if ($stmt->execute()){ 
+                    $contagem = 0;
+                    $result = $stmt->get_result();
+                    $status = $result->fetch_all(MYSQLI_ASSOC);
+                    foreach($status as $status){
+                        $contagem++;
+                    }
+                    return $contagem;
+                }
+            }
+        }
+
         /*Função de exclusão, que não permite a exclusão de usuário
         caso o mesmo seja responsável financeiro por algum apartamento.*/
         public static function delete($id){

@@ -1,5 +1,7 @@
 <?php
     include_once ("Connection.php");
+    include_once ("Email.php");
+    include_once ("Condomino.php");
     /*A classe Funcionario é utilizada por todas as views relacionadas ao Funcionário. 
     Seu primeiro elemento são os atributos, privados, e seus respectivos Sets e Gets.*/
     class Funcionario extends Connection{
@@ -13,6 +15,9 @@
         private $carteiratrab;
         private $salario;
         private $cargo;
+        private $usuario;
+        private $senha;
+        private $primeirasessao;
 
         public function setNome($nome){
             $this->nome = $nome;
@@ -95,9 +100,32 @@
         public function getCargo(){
             return $this->cargo;
         }
+
+        public function setUsuario($usuario){
+            $this->usuario = $usuario;
+        }
+
+        public function getUsuario(){
+            return $this->usuario;
+        }
+
+        public function setSenha($senha){
+            $this->senha = (int)$senha;
+        }
+
+        public function getSenha(){
+            return $this->senha;
+        }
+        public function setPrimeiraSessao($primeirasessao){
+            $this->primeirasessao = $primeirasessao;
+        }
+
+        public function getPrimeiraSessao(){
+            return $this->primeirasessao;
+        }
         
         /*O construtor da classe define todos os seus atributos*/
-        public function Funcionario($nome, $sobrenome, $rg, $cpf, $idade, $tel1, $tel2, $carteiratrab, $salario, $cargo){
+        public function Funcionario($nome, $sobrenome, $rg, $cpf, $idade, $tel1, $tel2, $carteiratrab, $salario, $cargo, $usuario){
             $this->setNome($nome);
             $this->setSobrenome($sobrenome);
             $this->setRg($rg);
@@ -108,6 +136,7 @@
             $this->setCarteiraTrab($carteiratrab);
             $this->setSalario($salario);
             $this->setCargo($cargo);
+            $this->setUsuario($usuario);
         }
 
         /*Função de inserção de funcionário, chamada por um objeto Funcionário.*/
@@ -122,9 +151,17 @@
             $carteiratrab = $this->getCarteiraTrab();
             $salario = $this->getSalario();
             $cargo = $this->getCargo();
+            $email = $this->getUsuario();
             $conn = $this->connectDB();
-            $stmt = $conn->prepare("INSERT INTO funcionario (nome, sobrenome, rg, cpf, idade, tel1, tel2, carteiratrab, salario, cargo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param('sssiiiiiis', $nome, $sobrenome, $rg, $cpf, $idade, $tel1, $tel2, $carteiratrab, $salario, $cargo);
+
+            //Define a senha provisória e envia o e-mail para alteração de senha para o funcionário
+            $uniqueID = uniqid();
+            $hash = Email::criaHash($uniqueID);
+            Email::emailPrimeiroAcesso($email, $uniqueID);
+            $senha = Condomino::generateRandomString();
+
+            $stmt = $conn->prepare("INSERT INTO funcionario (nome, sobrenome, rg, cpf, idade, tel1, tel2, carteiratrab, salario, cargo, usuario, senha, primeirasessao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param('sssiiiiiissss', $nome, $sobrenome, $rg, $cpf, $idade, $tel1, $tel2, $carteiratrab, $salario, $cargo, $email, $senha, $hash);
             
             if ($stmt->execute()){
                 echo "Inserido com sucesso!";
@@ -183,6 +220,24 @@
             } else echo $stmt->error;
         }
 
+        public static function adicionarPrivilegiosAdministrativos($id){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $stmt = $conn->prepare("UPDATE funcionario SET permissao = 1 WHERE id = ?");
+            $stmt->bind_param('i', $id);
+            if ($stmt->execute()){
+                echo "<br><div class=\"wrapper\">Funcionário agora pode entrar na parte administrativa do site</div>";
+            } else echo $stmt->error;
+        }
+
+        public static function removerPrivilegiosAdministrativos($id){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $stmt = $conn->prepare("UPDATE funcionario SET permissao = 0 WHERE id = ?");
+            $stmt->bind_param('i', $id);
+            if ($stmt->execute()){
+                echo "<br><div class=\"wrapper\">Funcionário não pode mais entrar na parte administrativa do site</div>";
+            } else echo $stmt->error;
+        }
+
         
         public function update($id){
             $nome = $this->getNome();
@@ -201,6 +256,26 @@
 
             if ($stmt->execute()){
                 echo "Editado com sucesso!";
+            } else echo $stmt->error;
+        }
+
+        public static function updatePassword($senha, $email){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $senha = password_hash($senha, PASSWORD_DEFAULT);
+            $stmt = $conn->prepare("UPDATE funcionario SET senha = ?, primeirasessao = NULL WHERE usuario = ?");
+            $stmt->bind_param('ss', $senha, $email);
+            if ($stmt->execute()){
+                header("Location: ../../login.php");
+            } else echo $stmt->error;
+        }
+        
+        public static function updateCadastro($senha, $email, $id){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $senha = password_hash($senha, PASSWORD_DEFAULT);
+            $stmt = $conn->prepare("UPDATE funcionario SET senha = ?, usuario = ? WHERE ID = ?");
+            $stmt->bind_param('ssi', $senha, $email, $id);
+            if ($stmt->execute()){
+                Login::logout($id);
             } else echo $stmt->error;
         }
 }

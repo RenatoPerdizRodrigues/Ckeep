@@ -5,6 +5,7 @@
     class Aviso extends Connection{
         private $dataav;
         private $descricao;
+        private $vencimento;
 
         public function setData($dataav){
             $this->dataav = $dataav;
@@ -22,6 +23,16 @@
             return $this->descricao;
         }
 
+        public function setVencimento($vencimento){
+            $this->vencimento = $vencimento;
+            
+            $this->vencimento = $vencimento;
+        }
+
+        public function getVencimento(){
+            return $this->vencimento;
+        }
+
         /*O construtor da classe define todos os seus atributos*/
         public function Aviso($dataav, $descricao){
             $this->setData($dataav);
@@ -32,9 +43,10 @@
         public function insert(){
             $data = $this->getData();
             $descricao = $this->getDescricao();
+            $vencimento = $this->getVencimento();
             $conn = $this->connectDB();
-            $stmt = $conn->prepare("INSERT INTO aviso (dataav, descricao) VALUES (?, ?)");
-            $stmt->bind_param('ss', $data, $descricao);
+            $stmt = $conn->prepare("INSERT INTO aviso (dataav, descricao, vencimento) VALUES (?, ?, ?)");
+            $stmt->bind_param('sss', $data, $descricao, $vencimento);
             
             if ($stmt->execute()){
                 echo "Inserido com sucesso!";
@@ -53,6 +65,33 @@
                             $result = $stmt->get_result();
                             return $result;
                         }
+        }
+
+        public static function countAvisosAtivos(){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $hoje = date('Y-m-d');
+            $stmt = $conn->prepare("SELECT * FROM aviso WHERE vencimento > ?");
+            $stmt->bind_param('s', $hoje);
+            if ($stmt->execute()){ 
+                $contagem = 0;
+                $result = $stmt->get_result();
+                $status = $result->fetch_all(MYSQLI_ASSOC);
+                foreach($status as $status){
+                    $contagem++;
+                }
+                return $contagem;
+            }               
+        }
+
+        //Busca todos os avisos que ainda não passaram da data de vencimento
+        public static function searchAtivos($hoje){
+            $conn = new mysqli("localhost", "root", "", "ckeep");     
+            $stmt = $conn->prepare("SELECT * FROM aviso WHERE ? <= vencimento");
+            $stmt->bind_param('s', $hoje);
+            if ($stmt->execute()){ 
+                $result = $stmt->get_result();
+            return $result;
+            }
         }
 
         public static function searchAll($conteudo, $tipo){

@@ -33,6 +33,9 @@
             </form>
         </div>
     </div>
+    <?php
+        include_once("../../footer.php");
+    ?>
 </body>
 </html>
 <?php
@@ -40,7 +43,7 @@
     $tipo = isset($_POST['tipoconsulta']) ? $_POST['tipoconsulta'] : null;
     $conteudo = isset($_POST['conteudo']) ? $_POST['conteudo'] : null;
     $acao = isset($_GET['acao']) ? $_GET['acao'] : null;
-    if ($tipo == 'nome'){
+    if ($tipo){
         $result = Condomino::search($conteudo, $tipo);
         echo "<br><br><table class=\"wrapper\">
         <tr>
@@ -69,36 +72,6 @@
                 <td>".$key['apartamento']."</td>
                 <td>".$key['titular']."</td>
                 <td><a href=\"editarcondomino.php?id=".$key['ID']."\">Editar</a><br><a href=\"?id=".$key['ID']."&acao=excluir\">Excluir</a></td>
-            </tr>";
-        }
-        echo "</table>";
-    } elseif($tipo == 'rg'){
-        $result = Condomino::search($conteudo, $tipo);
-        echo "<br><br><table class=\"wrapper\">
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Sobrenome</th>
-            <th>RG</th>
-            <th>CPF</th>
-            <th>Idade</th>
-            <th>Telefone 1</th>
-            <th>Telefone 2</th>
-            <th>Titular</th>
-            <th>Ação</th>
-        </tr>";
-        foreach($result as $key){
-            echo "<tr>
-                <td>".$key['ID']."</td>
-                <td>".$key['nome']."</td>
-                <td>".$key['sobrenome']."</td>
-                <td>".$key['rg']."</td>
-                <td>".$key['cpf']."</td>
-                <td>".$key['idade']."</td>
-                <td>".$key['tel1']."</td>
-                <td>".$key['tel2']."</td>
-                <td>".$key['titular']."</td>
-                <td><a href=\"?id=".$key['ID']."&acao=editar\">Editar</a><br><a href=\"?id=".$key['ID']."&acao=excluir\">Excluir</a></td>
             </tr>";
         }
         echo "</table>";

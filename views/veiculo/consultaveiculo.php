@@ -17,22 +17,27 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="consultaveiculo.php">
-        <fieldset>
-        <legend>Consulta de Veículo</legend>
-        <label>Qual o método de pesquisa?</label>
-            <select name="tipoconsulta">
-                <option value="placa">Placa</option>
-                <option value="modelo">Modelo</option>
-                <option value="nome">Nome do Proprietário</option>
-            </select><br>
-            <label>Conteúdo</label>
-            <input type="text" name="conteudo"><br><br>
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="lookup">
+        <div class="wrapper">
+            <form method="POST" action="consultaveiculo.php">
+            <fieldset>
+            <legend>Consulta de Veículo</legend>
+            <label>Qual o método de pesquisa?</label>
+                <select name="tipoconsulta">
+                    <option value="placa">Placa</option>
+                    <option value="modelo">Modelo</option>
+                    <option value="nome">Nome do Proprietário</option>
+                </select><br>
+                <label>Conteúdo</label>
+                <input type="text" name="conteudo"><br><br>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
+<?php
+    include_once("../../footer.php");
+?>
 </body>
 </html>
 <?php
@@ -41,7 +46,7 @@
     $conteudo = isset($_POST['conteudo']) ? $_POST['conteudo'] : null;
     $acao = isset($_GET['acao']) ? $_GET['acao'] : null;
     $result = null;
-    if ($tipo){
+    if ($tipo && $conteudo){
         if ($tipo == 'nome'){
         $condomino = Condomino::search($conteudo, $tipo);
         $usuario = $condomino->fetch_all(MYSQLI_ASSOC);
@@ -77,8 +82,8 @@
     } else {        
         $result = Veiculo::search($conteudo, $tipo);
         $veiculo = $result->fetch_all(MYSQLI_ASSOC);
-        if (!$veiculo){
-            header("Location: consultaveiculo.php");
+        if ($veiculo){
+            header("Location: consultaveiculo.php?message=error");
             exit();
         }
         $resultado = Condomino::search($veiculo[0]['condominoID'] ,'ID');

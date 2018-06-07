@@ -1,5 +1,7 @@
 <?php
     include_once ("Connection.php");
+    include_once ("Login.php");
+    include_once ("Email.php");
     /*A classe condômino é utilizada por todas as views relacionadas ao Condômino. 
     Seu primeiro elemento são os atributos, privados, e seus respectivos Sets e Gets.*/
     class Condomino extends Connection{
@@ -12,6 +14,9 @@
         private $tel2;
         private $apartamento;
         private $titular;
+        private $usuario;
+        private $senha;
+        private $primeirasessao;
 
         public function setNome($nome){
             $this->nome = $nome;
@@ -86,6 +91,30 @@
         public function getTitular(){
             return $this->titular;
         }
+
+        public function setUsuario($usuario){
+            $this->usuario = $usuario;
+        }
+
+        public function getUsuario(){
+            return $this->usuario;
+        }
+
+        public function setSenha($senha){
+            $this->senha = (int)$senha;
+        }
+
+        public function getSenha(){
+            return $this->senha;
+        }
+        public function setPrimeiraSessao($primeirasessao){
+            $this->primeirasessao = $primeirasessao;
+        }
+
+        public function getPrimeiraSessao(){
+            return $this->primeirasessao;
+        }
+
         
         /*O construtor da classe define todos os atributos, com exceção do booleano "Titular", que define se a pessoa é titular de seu respectivo apartamento ou não.
         O motivo para isso é que na página de edição de usuário, não é possível atualizar a titularidade do apartamento. Essa funcionalidade se encontra dentro da classe Apartamento.
@@ -112,8 +141,32 @@
             $tel2 = $this->getTel2();
             $apartamento = $this->getApartamento();
             $titular = $this->getTitular();
+            $email = $this->getUsuario();
+
+            $conn = $this->connectDB();
+            $stmt = $conn->prepare("INSERT INTO condomino (nome, sobrenome, rg, cpf, idade, tel1, tel2, apartamento, titular, usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param('sssiiiisis', $nome, $sobrenome, $rg, $cpf, $idade, $tel1, $tel2, $apartamento, $titular, $email);
+            if ($stmt->execute()){
+                echo "Inserido com sucesso";
+            } else echo $stmt->error;
+            /*Na execução do código, além de ser inserido na tabela de morador,
+            o usuário é inserido em responsável financeiro caso seja titular.
+            Já conferirmos anteriormente se já existe outro responsável.*/
+        }
+
+        public function insertEmail($email){
+            $nome = $this->getNome();
+            $sobrenome = $this->getSobrenome();
+            $rg = $this->getRg();
+            $cpf = $this->getCpf();
+            $idade = $this->getIdade();
+            $tel1 = $this->getTel1();
+            $tel2 = $this->getTel2();
+            $apartamento = $this->getApartamento();
+            $titular = $this->getTitular();
             $inserirtitular = true;
 
+            //Confere se o apartamento do condômino a ser cadastrado já possui titular. Se sim, a função é interrompida e substituída pela inserção normal, de condômino não titular.
             if ($titular == 1){
                 $conn = $this->connectDB();
                 $stmt = $conn->prepare("SELECT * FROM responsavel_financeiro WHERE apartamento = ?");
@@ -123,25 +176,47 @@
                 $resultadotitular = $result->fetch_all(MYSQLI_ASSOC);
                 if (!empty($resultadotitular)){
                     echo "Não é possível inserir usuário como responsável financeiro, apartamento já possui titular";
-                    $titular = 0;
-                    $inserirtitular = false;
+                    //Seta o valor do titular para 0 e registra o email a ser cadastrado
+                    $this->setTitular(0);
+                    $this->setUsuario($email);
+                    $this->insert();
+                    exit();
                 }
             }
 
+            $uniqueID = uniqid();
+            $hash = Email::criaHash($uniqueID);
+            Email::emailPrimeiroAcesso($email, $uniqueID);
+            
+            $senha = Condomino::generateRandomString();
+            
             $conn = $this->connectDB();
-            $stmt = $conn->prepare("INSERT INTO condomino (nome, sobrenome, rg, cpf, idade, tel1, tel2, apartamento, titular) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param('sssiiiisi', $nome, $sobrenome, $rg, $cpf, $idade, $tel1, $tel2, $apartamento, $titular);
+            $stmt = $conn->prepare("INSERT INTO condomino (nome, sobrenome, rg, cpf, idade, tel1, tel2, apartamento, titular, usuario, senha, primeirasessao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param('sssiiiisisss', $nome, $sobrenome, $rg, $cpf, $idade, $tel1, $tel2, $apartamento, $titular, $email, $senha, $hash);
             $stmt->execute();
             /*Na execução do código, além de ser inserido na tabela de morador,
             o usuário é inserido em responsável financeiro caso seja titular.
             Já conferirmos anteriormente se já existe outro responsável.*/
             if ($inserirtitular == true){
-                $this->insertResponsavel($apartamento, $nome, $sobrenome);
+                $this->insertResponsavel();
                 echo "Inserido com sucesso!";       
             } 
         }
 
-        public function insertResponsavel($apartamento, $nome, $sobrenome){
+        public static  function generateRandomString($length = 10) {
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $charactersLength = strlen($characters);
+            $randomString = '';
+            for ($i = 0; $i < $length; $i++) {
+                $randomString .= $characters[rand(0, $charactersLength - 1)];
+            }
+            return $randomString;
+        }
+
+        public function insertResponsavel(){
+            $apartamento = $this->getApartamento();
+            $nome = $this->getNome();
+            $sobrenome = $this->getSobrenome();
             $nomecompleto = $nome.' '.$sobrenome;            
             $result = $this->search($nomecompleto, 'nome');
             $usuario = $result->fetch_all(MYSQLI_ASSOC);
@@ -215,6 +290,26 @@
 
             if ($stmt->execute()){
                 echo "Editado com sucesso!";
+            } else echo $stmt->error;
+        }
+
+        public static function updatePassword($senha, $email){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $senha = password_hash($senha, PASSWORD_DEFAULT);
+            $stmt = $conn->prepare("UPDATE condomino SET senha = ?, primeirasessao = NULL WHERE usuario = ?");
+            $stmt->bind_param('ss', $senha, $email);
+            if ($stmt->execute()){
+                header("Location: ../../login.php");
+            } else echo $stmt->error;
+        }
+
+        public static function updateCadastro($senha, $email, $id){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $senha = password_hash($senha, PASSWORD_DEFAULT);
+            $stmt = $conn->prepare("UPDATE condomino SET senha = ?, usuario = ? WHERE ID = ?");
+            $stmt->bind_param('ssi', $senha, $email, $id);
+            if ($stmt->execute()){
+                Login::logout($id);
             } else echo $stmt->error;
         }
 }

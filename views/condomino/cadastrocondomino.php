@@ -24,7 +24,7 @@
         <div class="wrapper">
             <form method="POST" action="cadastrocondomino.php">
                 <fieldset>
-                    <legend>Cadastro de Funcionário</legend>
+                    <legend>Cadastro de Condômino</legend>
                     <div>
                         <label>Nome*</label>
                         <input required type="text" name="nome"><br>
@@ -64,7 +64,7 @@
                         <input required type="text" name="apartamento"><br>
                     </div>
                     <div>
-                        <label>É titular do apartamento?*</label>
+                        <label>É titular do apartamento?* (Apenas Condôminos Titulares podem logar no sistema)</label>
                         <div class="twoCheckboxes">
                             <div class="inline m-r-16">
                                 <input required type="radio" name="titular" value="1"> <span>Sim</span>
@@ -74,6 +74,12 @@
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <div>
+                            <label>E-mail</label>
+                            <input type="text" name="email"><br>
+                    </div>
+                    
                     <input type="submit" class="button m-t-16" value="Cadastrar">
                 </fieldset>
             </form>
@@ -109,12 +115,28 @@
     $tel2 = isset($_POST['tel2']) ? $_POST['tel2'] : null;
     $apartamento = isset($_POST['apartamento']) ? $_POST['apartamento'] : null;
     $titular = isset($_POST['titular']) ? (int)$_POST['titular'] : null;
+    $email = isset($_POST['email']) ? $_POST['email'] : null;
 
     if ($nome && $sobrenome && $rg && $cpf && $idade && $tel1 && isset($titular)){
-        //Objeto Condômino é criado e se insere no banco de dados através da função insert().
-        if ($user = new Condomino($nome, $sobrenome, $rg, $cpf, $idade, $tel1, $tel2, $apartamento)){
-        $user->setTitular($titular);
-        $user->insert();
+        //Objeto Condômino é criado e se insere no banco de dados através da função insert()
+        if ($titular == 1){
+            //Faz a inserção de responsável financeiro, que cadastra o usuário, envia e-mail de alteração de senha e o insere também na tabela de responsáveis;
+            if ($email == NULL){
+                echo "Responsável financeiro deve inserir e-mail!";
+                die();
+            }
+
+            if ($user = new Condomino($nome, $sobrenome, $rg, $cpf, $idade, $tel1, $tel2, $apartamento)){
+                $user->setTitular($titular);
+                $user->insertEmail($email);
+            }
+        } elseif ($titular == 0) {
+            //Cadastra o condômino comum, apenas na tabela condomino, com ou sem e-mail;
+            if ($user = new Condomino($nome, $sobrenome, $rg, $cpf, $idade, $tel1, $tel2, $apartamento)){
+                $user->setTitular($titular);
+                $user->setUsuario($email);
+                $user->insert();
+            }
         }
     }
 ?>

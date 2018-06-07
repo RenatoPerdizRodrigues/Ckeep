@@ -17,27 +17,40 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="cadastrogasto.php">
-        <fieldset>
-        <legend>Cadastro de Gasto</legend>
-            <label>Data*</label>
-            <input required type="hidden" name="datag" value="<?= $_GET['datag']; ?>"><br>
-            <input required type="data" value="<?= $_GET['datag']; ?>" disabled><br>
-            <label>Valor*</label>
-            <input required type="number" name="valor"><br>
-            <label>Tipo*</label>
-            <select name="tipo">
-                <option value="1">Fixo</option>
-                <option value="2">Extraordinário</option>
-                <option value="3">Atividade</option>
-            </select>
-            <label>Descrição*</label>
-            <input required type="textarea" name="descricao"><br>
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="container m-y-32 bg-white">
+        <div class="wrapper">
+            <form method="POST" action="cadastrogasto.php?datag=<?= $_GET['datag'] ?>">
+            <fieldset>
+            <legend>Cadastro de Gasto</legend>
+            <div>
+                <label>Data*</label>
+                <input required type="hidden" name="datag" value="<?= $_GET['datag']; ?>"><br>
+                <input required type="data" value="<?= $_GET['datag']; ?>" disabled><br>
+            </div>
+            <div>
+                <label>Valor*</label>
+                <input required type="number" name="valor"><br>
+            </div>
+            <div>
+                <label>Tipo*</label>
+                <select name="tipo">
+                    <option value="Fixo">Fixo</option>
+                    <option value="Extraordinario">Extraordinário</option>
+                    <option value="Atividade">Atividade</option>
+                </select>
+            </div>
+            <div>
+                <label>Descrição*</label>
+                <input required type="textarea" name="descricao"><br>
+            </div>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
+<?php
+    include_once("../../footer.php");
+?>
 </body>
 </html>
 <?php
@@ -49,7 +62,7 @@
     $datag = isset($_POST['datag']) ? $_POST['datag'] : null;
  
     if ($datag && $valor && $tipo && $descricao){
-        echo "entrei";
+        echo "$datag";
         if ($gasto = new Gasto($datag, $valor, $tipo, $descricao)){
         $gasto->insert();
         header("Location: consultaprevisao.php?datag=".$datag);

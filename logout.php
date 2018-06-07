@@ -16,7 +16,8 @@
 </body>
 </html>
 <?php
-    $id = isset($_SESSION['ID']) ? $_SESSION['ID'] : null;
+
+    $id = isset($_SESSION['sessao']) ? $_SESSION['sessao'] : null;
 
     if ($id) {
         Login::logout($_SESSION['sessao']);

@@ -4,6 +4,7 @@
         $logado = Login::authAdm($_SESSION['sessao']);
         include_once("../../header.php");
         include_once("../../usuario/classes/Reclamacao.php");
+
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +22,7 @@
     $acao = (isset($_GET['acao'])) ? $_GET['acao'] : null;
 
         //Implementar busca para condômino ou funcionário, dependendo do usuário;
-        $result = Reclamacao::listAllOpen();
+        $result = Reclamacao::listAllClosed();
         $reclamacoes = $result->fetch_all(MYSQLI_ASSOC);
         
         echo "<table>
@@ -51,23 +52,19 @@
             <td>".$reclamacoes['descricao']."</td>";
 
             echo "<td>".$aberto."</td>";
-            
-            if ($aberto == "Aberta"){
-                echo "<td><a href=\"responderreclamacao.php?id=".$reclamacoes['ID']."\">Responder</a><br><a href=\"consultareclamacao.php?id=".$reclamacoes['ID']."&acao=fechar\">Fechar</a></td>";
-            } elseif ($aberto == "Fechado"){
-                echo "<td><a href=\"responderreclamacao.php?id=".$reclamacoes['ID']."\">Responder</a><br><a href=\"consultareclamacao.php?id=".$reclamacoes['ID']."&acao=reabrir\">Reabrir</a></td>";
-            }
-
+        
+            echo    "<td><br><a href=\"consultareclamacaofechada.php?id=".$reclamacoes['ID']."&acao=reabrir\">Reabrir</a></td>";
             if($resposta){
                 echo "<td><a href=editarresposta.php?id=".$reclamacoes['ID'].">Visualizar ou Editar Resposta</a></td>";
             }
 
             echo "</tr>";
+            
         }        
     
 
-    if ($acao == 'fechar'){        
+    if ($acao == 'reabrir'){        
         $id = $_GET['id'];
-        $result = Reclamacao::fechar($id);
+        $result = Reclamacao::reabrir($id);
     }
 ?>

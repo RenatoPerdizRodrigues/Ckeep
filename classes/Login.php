@@ -63,7 +63,7 @@
                         $_SESSION['sessao'] = $idhash;
                         $stmt->bind_param('ssi', $idhash, $ip, $permissao);
                         if ($stmt->execute()){
-                            header("Location: " . ROOT . "funcionario/index.php");
+                            header("Location: " . ROOT . "usuario/index.php");
                             exit();
                         } echo $stmt->error;
                     } else {header("Location: login.php");}
@@ -85,11 +85,18 @@
                 $result = $stmt->get_result();
                 $usuario = $result->fetch_all(MYSQLI_ASSOC);
                 if ($usuario){
-                    //Pega as informações do resultado. Agora devemos comparar a senha;
-                    $checasenha = password_verify($senha, $usuario[0]['senha']);
+                    //Hora de comparar a senha digitada com a senha hasehada do banco de dados
+                    $checasenha = false;
+                    $correto = 0;
+                    //Este for verifica se a senha é correta e, caso seja, devolve também a posição do array usuario onde ele está
+                    for ($i = 0; $i < 5; $i++){
+                        $logado = password_verify($senha, $usuario[$i]['senha']);
+                        if ($logado == true){$correto = $si; $checasenha = true;}
+                    }
+
                     if ($checasenha == true){
                         //Login e Senha corretos, cria sessão
-                        $_SESSION['ID'] = $usuario[0]['ID'];
+                        $_SESSION['ID'] = $usuario[$correto]['ID'];
                         $ip = $_SERVER['REMOTE_ADDR'];
                         $permissao = 1;
                         //Insere sessão hasheada na tabela Session para autenticação em cada página
@@ -107,29 +114,26 @@
             } else echo $stmt->error;
         }
 
-        public static function createSession($id){
+        public static function checkPermission($id){
             $conn = new mysqli("localhost", "root", "", "ckeep");
-
-            $stmt = $conn->prepare("SELECT * FROM condomino WHERE ID = ?");
-            $stmt->bind_param('i', $id);
+            $stmt = $conn->prepare("SELECT * FROM sessao WHERE ID = ?");
+            $stmt->bind_param('s', $id);
             if ($stmt->execute()){
                 $result = $stmt->get_result();
-                $usuario = $result->fetch_all(MYSQLI_ASSOC);
-
-                $_SESSION['ID'] = $usuario[0]['ID'];
-                $_SESSION['nome'] = $usuario[0]['nome'];
-
-                //hash('md5', $_SESION['token']);
-                return $_SESSION['ID'];
+                $logado = $result->fetch_all(MYSQLI_ASSOC);
+                $permissao = $logado[0]['permissao'];
+                return $permissao;
             }
         }
 
-        public static function authCondomino($id){
+
+        public static function authUser($id){
             $conn = new mysqli("localhost", "root", "", "ckeep");
             $ip = $_SERVER['REMOTE_ADDR'];
             $permissao = (int)2;
-            $stmt = $conn->prepare("SELECT * FROM sessao WHERE ID = ? AND ip = ? AND permissao = ?");
-            $stmt->bind_param('ssi', $id, $ip, $permissao);
+            $permissao2 = (int)3;
+            $stmt = $conn->prepare("SELECT * FROM sessao WHERE ID = ? AND ip = ? AND permissao IN (?, ?)");
+            $stmt->bind_param('ssii', $id, $ip, $permissao, $permissao2);
             if ($stmt->execute()){
                 $result = $stmt->get_result();
                 $logado = $result->fetch_all(MYSQLI_ASSOC);
@@ -154,19 +158,32 @@
             } else echo $stmt->error;
         }
 
-        public static function authFuncionario($id){
+        public static function authEmail($uniqueID, $email){
             $conn = new mysqli("localhost", "root", "", "ckeep");
-            $ip = $_SERVER['REMOTE_ADDR'];
-            $permissao = (int)3;
-            $stmt = $conn->prepare("SELECT * FROM sessao WHERE ID = ? AND ip = ? AND permissao = ?");
-            $stmt->bind_param('ssi', $id, $ip, $permissao);
+            $stmt = $conn->prepare("SELECT * FROM condomino WHERE usuario = ?");
+            $emaildecodado = base64_decode($email);
+            $stmt->bind_param('s', $emaildecodado);
             if ($stmt->execute()){
                 $result = $stmt->get_result();
-                $logado = $result->fetch_all(MYSQLI_ASSOC);
-                if ($logado){
+                $banco = $result->fetch_all(MYSQLI_ASSOC);
+                if (password_verify($uniqueID, $banco[0]['primeirasessao'])){
                     return true;
-                } else {header("Location: ".ROOT."login.php");}
-            } else echo $stmt->error;
+                } else return false;
+            }
+        }
+
+        public static function authEmailFunc($uniqueID, $email){
+            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $stmt = $conn->prepare("SELECT * FROM funcionario WHERE usuario = ?");
+            $emaildecodado = base64_decode($email);
+            $stmt->bind_param('s', $emaildecodado);
+            if ($stmt->execute()){
+                $result = $stmt->get_result();
+                $banco = $result->fetch_all(MYSQLI_ASSOC);
+                if (password_verify($uniqueID, $banco[0]['primeirasessao'])){
+                    return true;
+                } else return false;
+            }
         }
 
         public static function logout($id){
@@ -178,7 +195,7 @@
                 session_destroy();
                 header("Location: " . ROOT . "login.php");
                 exit();
-            }            
+            }else echo $stmt->error;            
         }
     }
 

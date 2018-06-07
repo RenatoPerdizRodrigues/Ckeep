@@ -22,35 +22,64 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="<?= 'editarfuncionario.php?id='.$usuario[0]['ID']; ?>">
-        <fieldset>
-        <legend>Edição de Funcionário</legend>        
-            <input type="hidden" name="id" value="<?= $usuario[0]['ID']; ?>">
-            <label>Nome</label>
-            <input type="text" name="nome" value="<?= $usuario[0]['nome']; ?>"><br>
-            <label>Sobrenome</label>
-            <input type="text" name="sobrenome" value="<?= $usuario[0]['sobrenome']; ?>"><br>
-            <label>RG</label>
-            <input type="text" name="rg" value="<?= $usuario[0]['rg']; ?>"><br>
-            <label>CPF</label>
-            <input type="text" name="cpf" value="<?= $usuario[0]['cpf']; ?>"><br>
-            <label>Idade</label>
-            <input type="number" name="idade" value="<?= $usuario[0]['idade']; ?>"><br>
-            <label>Telefone 1</label>
-            <input type="number" name="tel1" value="<?= $usuario[0]['tel1']; ?>"><br>
-            <label>Telefone 2</label>
-            <input type="number" name="tel2" value="<?= $usuario[0]['tel2']; ?>"><br>
-            <label>Carteira de Trabalho</label>
-            <input type="number" name="carteiratrab" value="<?= $usuario[0]['carteiratrab']; ?>"><br>
-            <label>Salário</label>
-            <input type="number" name="salario" value="<?= $usuario[0]['salario']; ?>"><br>
-            <label>Cargo</label>
-            <input type="text" name="cargo" value="<?= $usuario[0]['cargo']; ?>"><br>                      
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="container m-y-32 bg-white">
+        <div class="wrapper">
+            <form method="POST" action="<?= 'editarfuncionario.php?id='.$usuario[0]['ID']; ?>">
+            <fieldset>
+            <legend>Edição de Funcionário</legend>        
+                <input type="hidden" name="id" value="<?= $usuario[0]['ID']; ?>">
+                <div>
+                    <label>Nome</label>
+                    <input type="text" name="nome" value="<?= $usuario[0]['nome']; ?>"><br>
+                </div>
+                <div>
+                    <label>Sobrenome</label>
+                    <input type="text" name="sobrenome" value="<?= $usuario[0]['sobrenome']; ?>"><br>
+                </div>
+                <div class="twoFields">
+                    <div>
+                        <label>RG</label>
+                        <input type="text" name="rg" value="<?= $usuario[0]['rg']; ?>"><br>
+                    </div>
+                    <div>
+                        <label>CPF</label>
+                        <input type="text" name="cpf" value="<?= $usuario[0]['cpf']; ?>"><br>
+                    </div>
+                </div>
+                <div class="threeFields">
+                    <div>
+                        <label>Idade</label>
+                        <input type="number" name="idade" value="<?= $usuario[0]['idade']; ?>"><br>
+                    </div>
+                    <div>
+                        <label>Telefone 1</label>
+                        <input type="number" name="tel1" value="<?= $usuario[0]['tel1']; ?>"><br>
+                    </div>
+                    <div>
+                        <label>Telefone 2</label>
+                        <input type="number" name="tel2" value="<?= $usuario[0]['tel2']; ?>"><br>
+                    </div>
+                </div>
+                <div>
+                    <label>Carteira de Trabalho</label>
+                    <input type="number" name="carteiratrab" value="<?= $usuario[0]['carteiratrab']; ?>"><br>
+                </div>
+                <div>
+                    <label>Salário</label>
+                    <input type="number" name="salario" value="<?= $usuario[0]['salario']; ?>"><br>
+                </div>
+                <div>
+                    <label>Cargo</label>
+                    <input type="text" name="cargo" value="<?= $usuario[0]['cargo']; ?>"><br>                      
+                </div>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
+    <?php
+        include_once("../../footer.php");
+?>
 </body>
 </html>
 <?php

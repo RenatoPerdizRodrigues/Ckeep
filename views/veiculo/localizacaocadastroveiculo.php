@@ -16,22 +16,27 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="localizacaocadastroveiculo.php">
-        <fieldset>
-        <legend>Consulta de Condômino para Cadastro de Veículo</legend>
-        <label>Quem é o proprietário do veículo a ser cadastrado??</label><br><br>
-        <label>Consultar por</label>
-            <select name="tipoconsulta">
-                <option value="nome">Nome</option>
-                <option value="rg">RG</option>
-            </select><br>
-            <label>Conteúdo</label>
-            <input type="text" name="conteudo"><br><br>
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="lookup">
+        <div class="wrapper">
+            <form method="POST" action="localizacaocadastroveiculo.php">
+            <fieldset>
+            <legend>Consulta de Condômino para Cadastro de Veículo</legend>
+            <label>Quem é o proprietário do veículo a ser cadastrado??</label><br><br>
+            <label>Consultar por</label>
+                <select name="tipoconsulta">
+                    <option value="nome">Nome</option>
+                    <option value="rg">RG</option>
+                </select><br>
+                <label>Conteúdo</label>
+                <input type="text" name="conteudo"><br><br>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
+<?php
+    include_once("../../footer.php");
+?>
 </body>
 </html>
 <?php

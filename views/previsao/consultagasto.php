@@ -3,7 +3,7 @@
     include_once("../../classes/Login.php");
     $logado = Login::authAdm($_SESSION['sessao']);
     include_once("../../header.php");
-    include_once("../../classes/Reclamacao.php");
+    include_once("../../classes/Gasto.php");
 ?>
 
 <!DOCTYPE html>
@@ -16,27 +16,28 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="consultagasto.php">
-        <fieldset>
-        <legend>Consulta de Gastos</legend>
-        <label>Tipo</label>
-            <select name="tipo">
-                <option value=1>Fixo</option>
-                <option value=2>Extraordinário</option>
-                <option value=3>Atividade</option>
-            </select>
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="lookup">
+        <div class="wrapper">
+            <form method="POST" action="consultagasto.php">
+            <fieldset>
+            <legend>Consulta de Gastos</legend>
+            <label>Tipo</label>
+                <select name="tipo">
+                    <option value="Fixo">Fixo</option>
+                    <option value="Extraordinario">Extraordinário</option>
+                    <option value="Atividade">Atividade</option>
+                </select>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
 <?php
     $tipo = (isset($_POST['tipo'])) ? $_POST['tipo'] : null;
     $acao = (isset($_GET['acao'])) ? $_GET['acao'] : null;
 
     if ($tipo){
-        echo $tipo;
-        $result = Reclamacao::search($tipo);
+        $result = Gasto::search($tipo);
         $gastos = $result->fetch_all(MYSQLI_ASSOC);
 
         echo "<table class=\"wrapper\">
@@ -67,3 +68,7 @@
         }
     }
 ?>
+<?php
+    include_once("../../footer.php");
+?>
+</body>

@@ -21,20 +21,29 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="wrapper">
-        <form method="POST" action="editaraviso.php?id=<?= $_GET['id'] ?>">
-        <fieldset>
-        <legend>Cadastro de Aviso</legend>
-            <label>Data*</label>
-            <input hidden type="date" name="data" value="<?= date('Y-m-d') ?>"><br>
-            <input hidden type="number" name="id" value="<?= $aviso[0]['ID'] ?>">
-            <input disabled type="date" name="data" value="<?= date('Y-m-d') ?>"><br>
-            <label>Descrição*</label>
-            <input required type="textarea" name="descricao" value="<?= $aviso[0]['descricao'] ?>"><br>
-            <input type="submit">
-        </fieldset>
-        </form>
+    <div class="container m-y-32 bg-white">
+        <div class="wrapper">
+            <form method="POST" action="editaraviso.php?id=<?= $_GET['id'] ?>">
+            <fieldset>
+            <legend>Edição de Aviso</legend>
+            <div>
+                <label>Data*</label>
+                <input  type="hidden" name="data" value="<?= date('Y-m-d') ?>"><br>
+                <input  type="hidden" name="id" value="<?= $aviso[0]['ID'] ?>">
+                <input disabled type="date" name="data" value="<?= date('Y-m-d') ?>"><br>
+            </div>
+            <div>
+                <label>Descrição*</label>
+                <input required type="textarea" name="descricao" value="<?= $aviso[0]['descricao'] ?>"><br>
+            </div>
+                <input type="submit" class="button" value="Enviar">
+            </fieldset>
+            </form>
+        </div>
     </div>
+<?php
+    include_once("../../footer.php");
+?>
 </body>
 </html>
 <?php
