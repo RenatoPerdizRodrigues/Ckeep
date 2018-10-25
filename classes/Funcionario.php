@@ -173,7 +173,7 @@
         e seu conteúdo. Caso seja procura por Nome, divide o conteúdo entre Nome e Sobrenome,
         e busca utilizando AND e LIKE.*/
         public static function search($conteudo, $tipo){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
                 if($tipo == 'nome'){
                     $stmt = $conn->prepare("SELECT * FROM funcionario WHERE nome = ? AND sobrenome LIKE ?");
                     $nomes = explode(" ", $conteudo);
@@ -201,7 +201,7 @@
         }
 
         public static function searchAllFuncionarios(){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("SELECT * FROM funcionario");
             if ($stmt->execute()){ 
                 $result = $stmt->get_result();
@@ -212,7 +212,7 @@
         /*Função de exclusão, que não permite a exclusão de usuário
         caso o mesmo seja responsável financeiro por algum apartamento.*/
         public static function delete($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("DELETE FROM funcionario WHERE id = ?");
             $stmt->bind_param('i', $id);
             if ($stmt->execute()){
@@ -221,7 +221,7 @@
         }
 
         public static function adicionarPrivilegiosAdministrativos($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("UPDATE funcionario SET permissao = 1 WHERE id = ?");
             $stmt->bind_param('i', $id);
             if ($stmt->execute()){
@@ -230,7 +230,7 @@
         }
 
         public static function removerPrivilegiosAdministrativos($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("UPDATE funcionario SET permissao = 0 WHERE id = ?");
             $stmt->bind_param('i', $id);
             if ($stmt->execute()){
@@ -260,7 +260,7 @@
         }
 
         public static function updatePassword($senha, $email){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $senha = password_hash($senha, PASSWORD_DEFAULT);
             $stmt = $conn->prepare("UPDATE funcionario SET senha = ?, primeirasessao = NULL WHERE usuario = ?");
             $stmt->bind_param('ss', $senha, $email);
@@ -270,7 +270,7 @@
         }
         
         public static function updateCadastro($senha, $email, $id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $senha = password_hash($senha, PASSWORD_DEFAULT);
             $stmt = $conn->prepare("UPDATE funcionario SET senha = ?, usuario = ? WHERE ID = ?");
             $stmt->bind_param('ssi', $senha, $email, $id);

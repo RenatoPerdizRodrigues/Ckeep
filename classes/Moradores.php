@@ -4,7 +4,7 @@
     Class Moradores{
 
         public static function search($apartamento){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
                                     
             $stmt = $conn->prepare("SELECT * FROM condomino WHERE apartamento = ?");
             $stmt->bind_param('s', $apartamento);
@@ -15,7 +15,7 @@
         }
 
         public static function countDevedor(){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
                                     
             $stmt = $conn->prepare("SELECT * FROM responsavel_financeiro WHERE statuspagamento = 0");
             if ($stmt->execute()){ 
@@ -30,7 +30,7 @@
         }
 
         public static function definirTitular($id, $apartamento){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $email = '';
             //Primeiro, checamos se o novo titular possui email cadastrado
             $stmt = $conn->prepare("SELECT * FROM condomino WHERE ID = ?");

@@ -78,7 +78,7 @@
         e busca utilizando AND e LIKE.*/
 
         public static function search($conteudo, $tipo){
-            $conn = new mysqli("localhost", "root", "", "ckeep");     
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");     
             $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE $tipo=?");
             $stmt->bind_param('s', $conteudo);
                     if ($stmt->execute()){ 
@@ -88,7 +88,7 @@
         }
 
         public static function listAllOpen(){
-            $conn = new mysqli("localhost", "root", "", "ckeep");     
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");     
             $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE aberto = 1");
             if ($stmt->execute()){ 
                 $result = $stmt->get_result();
@@ -97,7 +97,7 @@
         }
 
         public static function listAllClosed(){
-            $conn = new mysqli("localhost", "root", "", "ckeep");     
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");     
             $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE aberto = 0");
             if ($stmt->execute()){ 
                 $result = $stmt->get_result();
@@ -108,7 +108,7 @@
         /*Função de exclusão, que não permite a exclusão de usuário
         caso o mesmo seja responsável financeiro por algum apartamento.*/
         public static function delete($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("DELETE FROM reclamacao WHERE ID = ?");
             $stmt->bind_param('i', $id);
             if ($stmt->execute()){
@@ -131,7 +131,7 @@
         }
 
         public static function fechar($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $aberto = 0;
             $stmt = $conn->prepare("UPDATE reclamacao SET aberto = ? WHERE ID = ?");
             $stmt->bind_param('ii', $aberto, $id);
@@ -142,7 +142,7 @@
         }
         
         public static function reabrir($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $aberto = 1;
             $stmt = $conn->prepare("UPDATE reclamacao SET aberto = ? WHERE ID = ?");
             $stmt->bind_param('ii', $aberto, $id);
@@ -153,7 +153,7 @@
         }
 
         public static function responder($id, $resposta){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("UPDATE reclamacao SET resposta = ? WHERE ID = ?");
             $stmt->bind_param('si', $resposta, $id);
 

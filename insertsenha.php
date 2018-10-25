@@ -4,7 +4,7 @@
     $id = 1;
     $hashPwd = password_hash($senha, PASSWORD_DEFAULT);
 
-    $conn = new mysqli("localhost", "root", "", "ckeep");
+    $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
     $stmt = $conn->prepare("UPDATE funcionario SET usuario = ?, senha = ? WHERE ID = ?");
     $stmt->bind_param('ssi', $user, $hashPwd, $id);
     if ($stmt->execute()){

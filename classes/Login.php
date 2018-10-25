@@ -1,9 +1,10 @@
 <?php
+    include ('Connection.php');
     if (!defined('ROOT')) define('ROOT', 'http://localhost/ckeep/');
 
     class Login{
         public static function checkUserLogin($user, $senha){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
 
             //Primeira query volta os resultados da busca com o usuário para podermos comparar a senha em seguida
             $stmt = $conn->prepare("SELECT * FROM condomino WHERE usuario = ? ");
@@ -38,7 +39,7 @@
         }
 
         public static function checkFuncLogin($user, $senha){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
 
             $permissao = 0;
             //Primeira query volta os resultados da busca com o usuário para podermos comparar a senha em seguida
@@ -73,7 +74,7 @@
         }
 
         public static function checkAdmLogin($user, $senha){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
 
             //Primeira query volta os resultados da busca com o usuário para podermos comparar a senha em seguida
             $permissao = 1;
@@ -115,7 +116,7 @@
         }
 
         public static function checkPermission($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("SELECT * FROM sessao WHERE ID = ?");
             $stmt->bind_param('s', $id);
             if ($stmt->execute()){
@@ -128,7 +129,7 @@
 
 
         public static function authUser($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $ip = $_SERVER['REMOTE_ADDR'];
             $permissao = (int)2;
             $permissao2 = (int)3;
@@ -144,7 +145,7 @@
         }
 
         public static function authAdm($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $ip = $_SERVER['REMOTE_ADDR'];
             $permissao = (int)1;
             $stmt = $conn->prepare("SELECT * FROM sessao WHERE ID = ? AND ip = ? AND permissao = ?");
@@ -159,7 +160,7 @@
         }
 
         public static function authEmail($uniqueID, $email){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("SELECT * FROM condomino WHERE usuario = ?");
             $emaildecodado = base64_decode($email);
             $stmt->bind_param('s', $emaildecodado);
@@ -173,7 +174,7 @@
         }
 
         public static function authEmailFunc($uniqueID, $email){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("SELECT * FROM funcionario WHERE usuario = ?");
             $emaildecodado = base64_decode($email);
             $stmt->bind_param('s', $emaildecodado);
@@ -187,7 +188,7 @@
         }
 
         public static function logout($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("DELETE FROM sessao WHERE ID = ?");
             $stmt->bind_param('s', $id);
             if ($stmt->execute()){

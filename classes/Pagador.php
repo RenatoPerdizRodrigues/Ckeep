@@ -3,7 +3,7 @@
     class Pagador{
         //Listar cada apartamento, cada responsável financeiro, status de pagamento, opção de mudar para pagante e devedor;
         public static function search(){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
                                     
             $stmt = $conn->prepare("SELECT * FROM responsavel_financeiro");
             if ($stmt->execute()){ 
@@ -14,7 +14,7 @@
         }
 
         public static function searchVazios(){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
 
             $stmt = $conn->prepare("SELECT apartamentos.apartamento FROM apartamentos LEFT JOIN responsavel_financeiro ON apartamentos.apartamento = responsavel_financeiro.apartamento WHERE responsavel_financeiro.apartamento IS NULL");
             if ($stmt->execute()){ 
@@ -25,7 +25,7 @@
         }
 
         public static function alterarStatus($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("SELECT statuspagamento FROM responsavel_financeiro WHERE ID = ?");
             $stmt->bind_param('i', $id);
             if ($stmt->execute()){ 

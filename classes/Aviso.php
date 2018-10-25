@@ -58,7 +58,7 @@
         e seu conteúdo. Caso seja procura por Nome, divide o conteúdo entre Nome e Sobrenome,
         e busca utilizando AND e LIKE.*/
         public static function search($data){
-            $conn = new mysqli("localhost", "root", "", "ckeep");     
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");     
                 $stmt = $conn->prepare("SELECT * FROM aviso WHERE MONTH(?) = MONTH(dataav)");
                 $stmt->bind_param('s', $data);
                     if ($stmt->execute()){ 
@@ -68,7 +68,7 @@
         }
 
         public static function countAvisosAtivos(){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $hoje = date('Y-m-d');
             $stmt = $conn->prepare("SELECT * FROM aviso WHERE vencimento > ?");
             $stmt->bind_param('s', $hoje);
@@ -85,7 +85,7 @@
 
         //Busca todos os avisos que ainda não passaram da data de vencimento
         public static function searchAtivos($hoje){
-            $conn = new mysqli("localhost", "root", "", "ckeep");     
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");     
             $stmt = $conn->prepare("SELECT * FROM aviso WHERE ? <= vencimento");
             $stmt->bind_param('s', $hoje);
             if ($stmt->execute()){ 
@@ -95,7 +95,7 @@
         }
 
         public static function searchAll($conteudo, $tipo){
-            $conn = new mysqli("localhost", "root", "", "ckeep");     
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");     
                 $stmt = $conn->prepare("SELECT * FROM aviso WHERE $tipo=?");
                 $stmt->bind_param('s', $conteudo);
                     if ($stmt->execute()){ 
@@ -109,7 +109,7 @@
         /*Função de exclusão, que não permite a exclusão de usuário
         caso o mesmo seja responsável financeiro por algum apartamento.*/
         public static function delete($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("DELETE FROM aviso WHERE ID = ?");
             $stmt->bind_param('i', $id);
             if ($stmt->execute()){

@@ -1,6 +1,7 @@
 <?php
     session_start();
     include_once("classes/Login.php");
+    include_once('classes/Connection.php');
 ?>
 
 <!DOCTYPE html>

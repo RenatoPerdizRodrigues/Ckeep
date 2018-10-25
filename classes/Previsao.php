@@ -32,7 +32,7 @@
         }
 
         public static function searchAllGastos($datag){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("SELECT * FROM gastos WHERE MONTH(?) = MONTH(datag)");
             $stmt->bind_param('s', $datag);
             if ($stmt->execute()){ 
@@ -42,7 +42,7 @@
         }
 
         public static function searchAllGastosAnteriores($datag){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $mespesquisa = date("m",strtotime($datag));
             $anopesquisa = date("y",strtotime($datag));
             $anopesquisa += 2000;
@@ -55,7 +55,7 @@
         }
 
         public static function searchTotal($datag){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $mespesquisa = date("m",strtotime($datag));
             $anopesquisa = date("y",strtotime($datag));
             $anopesquisa += 2000;
@@ -68,7 +68,7 @@
         }
 
         public static function fecharGastos($total, $data){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             //Primeiro, descobrimos qual o mês anterior
             $mesatual = date("m",strtotime($data));
             $mesanterior = ($mesatual - 1);

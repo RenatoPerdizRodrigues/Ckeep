@@ -87,7 +87,7 @@
         e busca utilizando AND e LIKE.*/
 
         public static function search($tipo){
-            $conn = new mysqli("localhost", "root", "", "ckeep");     
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");     
                 $stmt = $conn->prepare("SELECT * FROM gastos WHERE tipo = ?");
                 $stmt->bind_param('s', $tipo);
                     if ($stmt->execute()){ 
@@ -97,7 +97,7 @@
         }
 
         public static function countReclamacao(){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
                                     
             $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE aberto = 1");
             if ($stmt->execute()){ 
@@ -112,7 +112,7 @@
         }
 
         public static function countReclamacaoUsuario($id, $table){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
                                     
             if ($table == 'condominoID'){
                 $stmt = $conn->prepare("SELECT * FROM reclamacao WHERE aberto = 1 AND condominoID = ?");
@@ -144,7 +144,7 @@
         /*Função de exclusão, que não permite a exclusão de usuário
         caso o mesmo seja responsável financeiro por algum apartamento.*/
         public static function delete($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("DELETE FROM reclamacao WHERE ID = ?");
             $stmt->bind_param('i', $id);
             if ($stmt->execute()){

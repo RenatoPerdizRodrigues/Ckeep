@@ -90,7 +90,7 @@
         e seu conteúdo. Caso seja procura por Nome, divide o conteúdo entre Nome e Sobrenome,
         e busca utilizando AND e LIKE.*/
         public static function search($conteudo, $tipo){
-            $conn = new mysqli("localhost", "root", "", "ckeep");     
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");     
                 $stmt = $conn->prepare("SELECT * FROM veiculo WHERE $tipo=?");
                 $stmt->bind_param('s', $conteudo);
                     if ($stmt->execute()){ 
@@ -102,7 +102,7 @@
         /*Função de exclusão, que não permite a exclusão de usuário
         caso o mesmo seja responsável financeiro por algum apartamento.*/
         public static function delete($id){
-            $conn = new mysqli("localhost", "root", "", "ckeep");
+            $conn = new mysqli("localhost", DB_NAME, DB_PASS, "ckeep");
             $stmt = $conn->prepare("DELETE FROM veiculo WHERE ID = ?");
             $stmt->bind_param('i', $id);
             if ($stmt->execute()){
